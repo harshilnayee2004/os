@@ -30,6 +30,10 @@
   @media (prefers-reduced-motion: reduce){
     *{ animation:none !important; transition-duration:0.001ms !important; }
   }
+  body.reduce-motion * {
+    animation: none !important;
+    transition-duration: 0.001ms !important;
+  }
 
   body{
     font-family:var(--font);
@@ -63,20 +67,21 @@
   #desktop{
     position:fixed; inset:0;
     overflow:hidden;
-    background:#160E2B;
+    background: linear-gradient(135deg, #120c24 0%, #1c0e35 40%, #18092d 100%);
   }
-  .blob{
-    position:absolute;
-    border-radius:50%;
-    filter:blur(70px);
-    opacity:0.65;
+  #desktop::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    background: 
+      radial-gradient(circle at 10% 20%, rgba(109, 91, 208, 0.35) 0%, transparent 60%),
+      radial-gradient(circle at 90% 10%, rgba(31, 158, 142, 0.25) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(192, 80, 158, 0.3) 0%, transparent 60%),
+      radial-gradient(circle at 80% 90%, rgba(109, 91, 208, 0.25) 0%, transparent 50%);
+    filter: blur(40px);
+    pointer-events: none;
   }
-  .blob-1{ width:520px; height:520px; background:#5B3FCB; top:-120px; left:-100px; animation:float1 22s ease-in-out infinite; }
-  .blob-2{ width:480px; height:480px; background:#1F9E8E; bottom:-140px; right:-80px; animation:float2 26s ease-in-out infinite; }
-  .blob-3{ width:420px; height:420px; background:#C0509E; top:30%; right:10%; animation:float3 19s ease-in-out infinite; }
-  @keyframes float1{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(60px,40px) scale(1.1); } }
-  @keyframes float2{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-50px,-30px) scale(1.08); } }
-  @keyframes float3{ 0%,100%{ transform:translate(0,0) scale(1); } 50%{ transform:translate(-40px,50px) scale(0.95); } }
 
   /* ============ MENU BAR ============ */
   .menubar{
@@ -156,12 +161,19 @@
     border-radius:14px;
     background:rgba(255,255,255,0.92);
     display:flex; align-items:center; justify-content:center;
-    font-size:24px;
-    transition:transform 0.18s cubic-bezier(.3,1.4,.5,1), box-shadow 0.18s ease;
+    transition:transform 0.18s cubic-bezier(.3,1.4,.5,1), box-shadow 0.18s ease, background-color 0.15s ease;
     box-shadow:0 4px 10px rgba(0,0,0,0.25);
   }
-  .dock-icon:hover{ transform:translateY(-10px) scale(1.12); box-shadow:0 14px 22px rgba(0,0,0,0.32); }
+  .dock-icon:hover{ transform:translateY(-10px) scale(1.12); box-shadow:0 14px 22px rgba(0,0,0,0.32); background:#fff; }
   .dock-icon:active{ transform:translateY(-4px) scale(1.04); }
+  .dock-svg{
+    width:22px; height:22px;
+    color:var(--ink-soft);
+    transition:color 0.15s ease;
+  }
+  .dock-icon:hover .dock-svg{
+    color:var(--accent);
+  }
   .dock-label{
     position:absolute; bottom:64px; left:50%; transform:translateX(-50%);
     background:rgba(20,14,38,0.9); color:#fff;
@@ -203,7 +215,19 @@
   .win.maximized{
     left:10px !important; top:50px !important;
     width:calc(100vw - 20px) !important;
-    height:calc(100vh - 130px) !important;
+    height:calc(100vh - 120px) !important;
+    transition:left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease;
+  }
+  .win.snapped-left {
+    left:10px !important; top:50px !important;
+    width:calc(50vw - 15px) !important;
+    height:calc(100vh - 120px) !important;
+    transition:left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease;
+  }
+  .win.snapped-right {
+    left:calc(50vw + 5px) !important; top:50px !important;
+    width:calc(50vw - 15px) !important;
+    height:calc(100vh - 120px) !important;
     transition:left 0.25s ease, top 0.25s ease, width 0.25s ease, height 0.25s ease;
   }
   .win.active .win-titlebar{ background:rgba(255,255,255,0.55); }
@@ -223,10 +247,45 @@
   .win-btn{
     width:12px; height:12px; border-radius:50%;
     cursor:pointer;
+    position:relative;
   }
   .win-btn.close{ background:var(--close); }
   .win-btn.min{ background:var(--min); }
   .win-btn.max{ background:var(--max); }
+
+  .win-btn::before {
+    content: '';
+    color: rgba(0, 0, 0, 0.55);
+    position: absolute;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+    line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .win-btns:hover .win-btn::before {
+    opacity: 1;
+  }
+  .win-btn.close::before {
+    content: '×';
+    font-size: 9px;
+    font-weight: 700;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .win-btn.min::before {
+    content: '–';
+    font-size: 8px;
+    font-weight: 700;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -52%);
+  }
+  .win-btn.max::before {
+    content: '+';
+    font-size: 7px;
+    font-weight: 700;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+  }
   .win-title{
     flex:1; text-align:center;
     font-size:12.5px; font-weight:600; color:var(--ink-soft);
@@ -584,6 +643,193 @@
     outline-offset: 2px;
   }
 
+  /* ============ SPOTLIGHT SEARCH ============ */
+  #spotlight {
+    position: fixed; inset: 0;
+    z-index: 3500;
+    background: rgba(14, 8, 30, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: flex-start; justify-content: center;
+    padding-top: 12vh;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  #spotlight.active {
+    display: flex;
+    opacity: 1;
+  }
+  .spotlight-card {
+    width: 600px;
+    max-width: calc(100vw - 32px);
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 16px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    transform: scale(0.95);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  #spotlight.active .spotlight-card {
+    transform: scale(1);
+  }
+  .spotlight-header {
+    display: flex; align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    gap: 12px;
+  }
+  .spotlight-icon {
+    width: 20px; height: 20px; color: var(--ink-soft); flex: none;
+  }
+  #spotlight-input {
+    flex: 1;
+    border: none; outline: none; background: transparent;
+    font-family: var(--font); font-size: 1.1rem; font-weight: 500;
+    color: var(--ink);
+  }
+  #spotlight-input::placeholder {
+    color: var(--label);
+  }
+  .spotlight-results {
+    max-height: 330px;
+    overflow-y: auto;
+    padding: 8px;
+  }
+  .spotlight-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+    color: var(--ink-soft);
+  }
+  .spotlight-item.selected {
+    background: var(--accent);
+    color: #fff;
+  }
+  .spotlight-item-left {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .spotlight-item-icon {
+    width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+  }
+  .spotlight-item-name {
+    font-size: 0.94rem; font-weight: 600;
+  }
+  .spotlight-item-shortcut {
+    font-size: 0.72rem; font-weight: 700; opacity: 0.65;
+    background: rgba(0, 0, 0, 0.05); padding: 2px 6px; border-radius: 4px;
+    text-transform: uppercase;
+  }
+  .spotlight-item.selected .spotlight-item-shortcut {
+    background: rgba(255, 255, 255, 0.25);
+  }
+  .spotlight-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px;
+    background: rgba(0, 0, 0, 0.02);
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
+    font-size: 0.74rem; color: var(--label);
+  }
+  .spotlight-help span {
+    font-weight: 700;
+    background: rgba(0, 0, 0, 0.05); padding: 1px 4px; border-radius: 3px;
+    margin: 0 2px;
+  }
+  /* ============ SNAP PREVIEW GHOST ============ */
+  #snap-preview {
+    position: fixed;
+    z-index: 1999;
+    background: rgba(109, 91, 208, 0.15);
+    border: 2px solid rgba(109, 91, 208, 0.5);
+    border-radius: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, inset 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* ============ MENU BAR DROPDOWN ============ */
+  .mb-left {
+    position: relative;
+  }
+  .mb-menu-btn {
+    color: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  .mb-menu-btn:hover, .mb-menu-btn.active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+  .mb-menu-dropdown {
+    position: absolute;
+    top: 32px;
+    left: 0;
+    width: 200px;
+    background: rgba(20, 14, 38, 0.85);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    padding: 6px;
+    display: none;
+    flex-direction: column;
+    z-index: 2100;
+    opacity: 0;
+    transform: translateY(-5px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+  }
+  .mb-menu-dropdown.active {
+    display: flex;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .dropdown-item {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-align: left;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.12s ease, color 0.12s ease;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+  }
+  .dropdown-item:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+  .dropdown-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.08);
+    margin: 4px 6px;
+  }
+  .toggle-status {
+    font-size: 9px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .dropdown-item:hover .toggle-status {
+    background: rgba(255, 255, 255, 0.25);
+  }
+
 </style>
 </head>
 <body>
@@ -594,12 +840,23 @@
   </div>
 
   <div id="desktop">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+    <div id="snap-preview"></div>
 
     <div class="menubar">
-      <div class="mb-left"><span class="dot"></span>HarshilOS</div>
+      <div class="mb-left">
+        <span class="dot"></span>
+        <button class="mb-menu-btn" id="brand-menu-btn" aria-haspopup="true" aria-expanded="false">HarshilOS</button>
+        <div class="mb-menu-dropdown" id="brand-dropdown">
+          <button class="dropdown-item" id="menu-about-build">About This Build</button>
+          <button class="dropdown-item" id="menu-restart-tour">Restart Tour</button>
+          <button class="dropdown-item" id="menu-toggle-motion">
+            <span>Reduce Motion</span>
+            <span class="toggle-status" id="motion-status-text">OFF</span>
+          </button>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://github.com/harshilnayee2004/os" target="_blank" rel="noopener">View Source</a>
+        </div>
+      </div>
       <div class="mb-right">
         <button class="mb-link" id="tourBtn"><span class="desktop-text">Help Tour</span><span class="mobile-text">Tour</span></button>
         <button class="mb-link" id="closeAllBtn">Close All</button>
@@ -628,6 +885,31 @@
           <div class="mini-stat"><div class="num">500+</div><div class="cap">Daily checkups handled</div></div>
           <div class="mini-stat"><div class="num">2TB+</div><div class="cap">Product data managed</div></div>
           <div class="mini-stat"><div class="num">24</div><div class="cap">Medical forms shipped</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== WINDOW: ABOUT BUILD ===== -->
+    <div class="win" id="win-about-build" data-id="about-build">
+      <div class="win-titlebar">
+        <div class="win-btns">
+          <span class="win-btn close" data-action="close"></span>
+          <span class="win-btn min" data-action="min"></span>
+          <span class="win-btn max" data-action="max"></span>
+        </div>
+        <div class="win-title">about-build.app</div>
+      </div>
+      <div class="win-content" style="text-align: center; padding: 26px 20px;">
+        <h3 class="wt" style="font-size: 1.3rem; font-weight: 800; margin-bottom: 2px;">HarshilOS Build</h3>
+        <p style="font-size: 0.76rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px;">Version 1.2.0 (Stable)</p>
+        <p style="font-size: 0.88rem; line-height: 1.5; color: var(--ink-soft); margin-bottom: 20px;">
+          A premium portfolio virtual desktop build with integrated Gemini API simulated chatbot, guided onboarding tour, Sonoma-style gradient mesh, ⌘K search bar, and edge-snapping window layouts.
+        </p>
+        <div style="font-size: 0.78rem; color: var(--label); border-top: 1px solid rgba(0,0,0,0.06); padding-top: 14px; text-align: left; display: flex; flex-direction: column; gap: 6px;">
+          <div><strong>Build Date:</strong> June 22, 2026</div>
+          <div><strong>Engine:</strong> MERN (React, Express, Node.js, MongoDB)</div>
+          <div><strong>Hosting:</strong> Vercel + AWS EC2 + Railway + Cloudflare R2</div>
+          <div><strong>Author:</strong> Harshil Nayee</div>
         </div>
       </div>
     </div>
@@ -819,14 +1101,38 @@
     </div>
 
     <div class="dock">
-      <button class="dock-icon" data-win="about" aria-label="Open About">🙂<span class="dock-label">About</span><span class="run-dot"></span></button>
-      <button class="dock-icon" data-win="skills" aria-label="Open Skills">🛠️<span class="dock-label">Skills</span><span class="run-dot"></span></button>
-      <button class="dock-icon" data-win="experience" aria-label="Open Experience">💼<span class="dock-label">Experience</span><span class="run-dot"></span></button>
-      <button class="dock-icon" data-win="projects" aria-label="Open Projects">🚀<span class="dock-label">Projects</span><span class="run-dot"></span></button>
-      <button class="dock-icon" data-win="ai" aria-label="Open Ask AI">🤖<span class="dock-label">Ask AI</span><span class="run-dot"></span></button>
-      <button class="dock-icon" data-win="education" aria-label="Open Education">🎓<span class="dock-label">Education</span><span class="run-dot"></span></button>
-      <button class="dock-icon" data-win="certifications" aria-label="Open Certifications">📜<span class="dock-label">Certs</span><span class="run-dot"></span></button>
-      <button class="dock-icon" data-win="contact" aria-label="Open Contact">✉️<span class="dock-label">Contact</span><span class="run-dot"></span></button>
+      <button class="dock-icon" data-win="about" aria-label="Open About">
+        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="dock-label">About</span><span class="run-dot"></span>
+      </button>
+      <button class="dock-icon" data-win="skills" aria-label="Open Skills">
+        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span class="dock-label">Skills</span><span class="run-dot"></span>
+      </button>
+      <button class="dock-icon" data-win="experience" aria-label="Open Experience">
+        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        <span class="dock-label">Experience</span><span class="run-dot"></span>
+      </button>
+      <button class="dock-icon" data-win="projects" aria-label="Open Projects">
+        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.25-2.5 3.5-2.5 3.5s2.25-1 3.5-2.5M19.5 4.5c1.5-1.25 2.5-3.5 2.5-3.5s-2.25 1-3.5 2.5"/><path d="M2 22s5-1 9-5l9-9c1.5-1.5 2.5-3.5 2.5-3.5s-2 1-3.5 2.5l-9 9c-4 4-5 9-5 9z"/><path d="M9 15l3 3m-3-6l6 6"/></svg>
+        <span class="dock-label">Projects</span><span class="run-dot"></span>
+      </button>
+      <button class="dock-icon" data-win="ai" aria-label="Open Ask AI">
+        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/><path d="M9 7h6M12 3v4m-4 0h8"/></svg>
+        <span class="dock-label">Ask AI</span><span class="run-dot"></span>
+      </button>
+      <button class="dock-icon" data-win="education" aria-label="Open Education">
+        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>
+        <span class="dock-label">Education</span><span class="run-dot"></span>
+      </button>
+      <button class="dock-icon" data-win="certifications" aria-label="Open Certifications">
+        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span class="dock-label">Certs</span><span class="run-dot"></span>
+      </button>
+      <button class="dock-icon" data-win="contact" aria-label="Open Contact">
+        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <span class="dock-label">Contact</span><span class="run-dot"></span>
+      </button>
     </div>
     <!-- ===== GUIDED TOUR OVERLAY & TOOLTIP ===== -->
     <div id="tour-overlay">
@@ -856,12 +1162,66 @@
           </div>
         </div>
       </div>
+    <!-- ===== SPOTLIGHT SEARCH ===== -->
+    <div id="spotlight">
+      <div class="spotlight-card">
+        <div class="spotlight-header">
+          <svg class="spotlight-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="spotlight-input" placeholder="Search apps, files, or actions..." autocomplete="off">
+        </div>
+        <div class="spotlight-results" id="spotlight-results">
+          <!-- Results populated dynamically -->
+        </div>
+        <div class="spotlight-footer">
+          <div class="spotlight-shortcuts">
+            <span class="spotlight-help"><span>↑↓</span> Navigate</span>
+            <span class="spotlight-help"><span>⏎</span> Open</span>
+            <span class="spotlight-help"><span>ESC</span> Close</span>
+          </div>
+          <div class="spotlight-tip">
+            ⌘K to toggle
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
 <script>
-  // ===== boot splash =====
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // ===== boot splash & motion preference =====
+  let reduceMotion = false;
+  try {
+    const storedMotion = localStorage.getItem('reduce_motion');
+    if (storedMotion !== null) {
+      reduceMotion = storedMotion === 'true';
+    } else {
+      reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    }
+  } catch (e) {
+    reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+  
+  if (reduceMotion) {
+    document.body.classList.add('reduce-motion');
+  }
+
+  function toggleReduceMotion(forceVal) {
+    const isMotionReduced = forceVal !== undefined ? forceVal : !document.body.classList.contains('reduce-motion');
+    document.body.classList.toggle('reduce-motion', isMotionReduced);
+    window.reduceMotion = isMotionReduced;
+    reduceMotion = isMotionReduced;
+    
+    const statusText = document.getElementById('motion-status-text');
+    if (statusText) {
+      statusText.textContent = isMotionReduced ? 'ON' : 'OFF';
+    }
+    
+    try {
+      localStorage.setItem('reduce_motion', isMotionReduced ? 'true' : 'false');
+    } catch (e) {
+      console.warn("localStorage not available:", e);
+    }
+  }
+
   const splash = document.getElementById('bootSplash');
   setTimeout(() => splash.classList.add('hide'), reduceMotion ? 0 : 1300);
   setTimeout(() => splash.remove(), reduceMotion ? 50 : 1850);
@@ -873,13 +1233,167 @@
   }
   tick(); setInterval(tick, 1000 * 15);
 
+  // ===== spotlight search =====
+  const spotlightItems = [
+    { name: "About Me", type: "app", target: "about", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>` },
+    { name: "Skills", type: "app", target: "skills", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>` },
+    { name: "Experience", type: "app", target: "experience", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>` },
+    { name: "Projects", type: "app", target: "projects", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><path d="M4.5 16.5c-1.5 1.25-2.5 3.5-2.5 3.5s2.25-1 3.5-2.5M19.5 4.5c1.5-1.25 2.5-3.5 2.5-3.5s-2.25 1-3.5 2.5"/><path d="M2 22s5-1 9-5l9-9c1.5-1.5 2.5-3.5 2.5-3.5s-2 1-3.5 2.5l-9 9c-4 4-5 9-5 9z"/><path d="M9 15l3 3m-3-6l6 6"/></svg>` },
+    { name: "Ask AI Chatbot", type: "app", target: "ai", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/><path d="M9 7h6M12 3v4m-4 0h8"/></svg>` },
+    { name: "Education", type: "app", target: "education", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/></svg>` },
+    { name: "Certifications", type: "app", target: "certifications", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>` },
+    { name: "Contact", type: "app", target: "contact", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>` },
+    { name: "Restart Guided Tour", type: "action", target: "tour", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>` },
+    { name: "Toggle Reduce Motion", type: "action", target: "motion", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="9" y1="9" x2="15" y2="15"/><line x1="15" y1="9" x2="9" y2="15"/></svg>` },
+    { name: "Close All Windows", type: "action", target: "close-all", icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:100%;height:100%;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>` }
+  ];
+
+  const spotlightEl = document.getElementById('spotlight');
+  const spotlightInput = document.getElementById('spotlight-input');
+  const spotlightResults = document.getElementById('spotlight-results');
+  let spotlightActive = false;
+  let spotlightFiltered = [];
+  let spotlightIndex = 0;
+
+  function toggleSpotlight(show) {
+    const shouldShow = show !== undefined ? show : !spotlightActive;
+    if (shouldShow === spotlightActive) return;
+    
+    spotlightActive = shouldShow;
+    if (spotlightActive) {
+      spotlightEl.style.display = 'flex';
+      setTimeout(() => {
+        spotlightEl.classList.add('active');
+        spotlightInput.value = '';
+        spotlightInput.focus();
+        filterSpotlight('');
+      }, 20);
+    } else {
+      spotlightEl.classList.remove('active');
+      setTimeout(() => {
+        spotlightEl.style.display = 'none';
+      }, 200);
+    }
+  }
+
+  function filterSpotlight(q) {
+    const query = q.toLowerCase().trim();
+    if (!query) {
+      spotlightFiltered = [...spotlightItems];
+    } else {
+      spotlightFiltered = spotlightItems.filter(item => item.name.toLowerCase().includes(query));
+    }
+    spotlightIndex = 0;
+    renderSpotlightResults();
+  }
+
+  function renderSpotlightResults() {
+    spotlightResults.innerHTML = '';
+    if (spotlightFiltered.length === 0) {
+      spotlightResults.innerHTML = '<div style="padding:14px;text-align:center;font-size:0.88rem;color:var(--label);">No results found</div>';
+      return;
+    }
+    spotlightFiltered.forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = `spotlight-item ${idx === spotlightIndex ? 'selected' : ''}`;
+      row.innerHTML = `
+        <div class="spotlight-item-left">
+          <div class="spotlight-item-icon">${item.icon}</div>
+          <span class="spotlight-item-name">${item.name}</span>
+        </div>
+        <span class="spotlight-item-shortcut">${item.type}</span>
+      `;
+      row.addEventListener('click', () => {
+        spotlightIndex = idx;
+        executeSpotlightAction();
+      });
+      spotlightResults.appendChild(row);
+    });
+  }
+
+  function executeSpotlightAction() {
+    const item = spotlightFiltered[spotlightIndex];
+    if (!item) return;
+    
+    toggleSpotlight(false);
+    
+    if (item.type === 'app') {
+      openWindow(item.target);
+    } else if (item.type === 'action') {
+      if (item.target === 'tour') {
+        startTour();
+      } else if (item.target === 'motion') {
+        toggleReduceMotion();
+      } else if (item.target === 'close-all') {
+        document.getElementById('closeAllBtn').click();
+      }
+    }
+  }
+
+  spotlightInput.addEventListener('input', (e) => {
+    filterSpotlight(e.target.value);
+  });
+
+  spotlightEl.addEventListener('click', (e) => {
+    if (e.target === spotlightEl) toggleSpotlight(false);
+  });
+
+  window.addEventListener('keydown', (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+      e.preventDefault();
+      toggleSpotlight();
+    }
+    
+    if (!spotlightActive) return;
+    
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      toggleSpotlight(false);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (spotlightFiltered.length > 0) {
+        spotlightIndex = (spotlightIndex + 1) % spotlightFiltered.length;
+        renderSpotlightResults();
+        ensureSelectedResultVisible();
+      }
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (spotlightFiltered.length > 0) {
+        spotlightIndex = (spotlightIndex - 1 + spotlightFiltered.length) % spotlightFiltered.length;
+        renderSpotlightResults();
+        ensureSelectedResultVisible();
+      }
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      executeSpotlightAction();
+    }
+  });
+
+  function ensureSelectedResultVisible() {
+    const selectedEl = spotlightResults.querySelector('.spotlight-item.selected');
+    if (!selectedEl) return;
+    const parent = spotlightResults;
+    
+    const parentTop = parent.scrollTop;
+    const parentBottom = parentTop + parent.clientHeight;
+    
+    const elemTop = selectedEl.offsetTop;
+    const elemBottom = elemTop + selectedEl.offsetHeight;
+    
+    if (elemTop < parentTop) {
+      parent.scrollTop = elemTop;
+    } else if (elemBottom > parentBottom) {
+      parent.scrollTop = elemBottom - parent.clientHeight;
+    }
+  }
+
   // ===== window manager =====
   const isMobile = () => window.innerWidth <= 768;
   let zTop = 100;
   let openCount = 0;
 
   const winDefaults = {
-    about:{w:560,h:430}, skills:{w:540,h:430}, experience:{w:580,h:480},
+    about:{w:560,h:430}, 'about-build':{w:420,h:350}, skills:{w:540,h:430}, experience:{w:580,h:480},
     projects:{w:600,h:480}, ai:{w:540,h:480}, education:{w:460,h:230}, certifications:{w:540,h:380}, contact:{w:460,h:360}
   };
 
@@ -1527,32 +2041,178 @@
     win.addEventListener('mousedown', () => bringToFront(win));
   });
 
-  // dragging via titlebar
+  // dragging via titlebar with edge-snapping
+  const snapPreview = document.getElementById('snap-preview');
+  
   document.querySelectorAll('.win-titlebar').forEach(handle => {
     let dragging = false, startX, startY, originX, originY;
+    let activeSnap = null; // 'left' | 'right' | 'top' | null
     const win = handle.closest('.win');
 
     handle.addEventListener('pointerdown', (e) => {
       if(e.target.closest('.win-btn')) return;
-      if(isMobile() || win.classList.contains('maximized')) return;
       dragging = true;
       bringToFront(win);
+      
       startX = e.clientX; startY = e.clientY;
       const rect = win.getBoundingClientRect();
       originX = rect.left; originY = rect.top;
+      
+      // If maximized or snapped, smooth unsnap
+      if (win.classList.contains('maximized') || win.classList.contains('snapped-left') || win.classList.contains('snapped-right')) {
+        const prevW = parseFloat(win.dataset.prevW) || 520;
+        const prevH = parseFloat(win.dataset.prevH) || 400;
+        
+        win.classList.remove('maximized', 'snapped-left', 'snapped-right');
+        win.style.width = prevW + 'px';
+        win.style.height = prevH + 'px';
+        
+        // Center under pointer
+        const newLeft = e.clientX - prevW / 2;
+        const newTop = e.clientY - 20;
+        
+        win.style.left = newLeft + 'px';
+        win.style.top = newTop + 'px';
+        
+        originX = newLeft;
+        originY = newTop;
+        startX = e.clientX;
+        startY = e.clientY;
+      } else {
+        // Save pre-snap dimensions
+        win.dataset.prevW = rect.width;
+        win.dataset.prevH = rect.height;
+        win.dataset.prevLeft = rect.left + 'px';
+        win.dataset.prevTop = rect.top + 'px';
+      }
+      
       handle.setPointerCapture(e.pointerId);
     });
+
     handle.addEventListener('pointermove', (e) => {
       if(!dragging) return;
       const dx = e.clientX - startX, dy = e.clientY - startY;
       let newX = originX + dx, newY = originY + dy;
+      
       newX = Math.max(4, Math.min(window.innerWidth - 100, newX));
-      newY = Math.max(44, Math.min(window.innerHeight - 80, newY));
+      newY = Math.max(40, Math.min(window.innerHeight - 80, newY));
+      
       win.style.left = newX + 'px';
       win.style.top = newY + 'px';
+      
+      if (isMobile()) return;
+      
+      const threshold = 25;
+      const x = e.clientX;
+      const y = e.clientY;
+      
+      if (x < threshold) {
+        activeSnap = 'left';
+        showSnapGhost(10, 50, window.innerWidth / 2 - 15, window.innerHeight - 120);
+      } else if (x > window.innerWidth - threshold) {
+        activeSnap = 'right';
+        showSnapGhost(window.innerWidth / 2 + 5, 50, window.innerWidth / 2 - 15, window.innerHeight - 120);
+      } else if (y < 40 + threshold) {
+        activeSnap = 'top';
+        showSnapGhost(10, 50, window.innerWidth - 20, window.innerHeight - 120);
+      } else {
+        activeSnap = null;
+        hideSnapGhost();
+      }
     });
-    handle.addEventListener('pointerup', () => { dragging = false; });
-    handle.addEventListener('pointercancel', () => { dragging = false; });
+
+    handle.addEventListener('pointerup', () => {
+      if(!dragging) return;
+      dragging = false;
+      hideSnapGhost();
+      
+      if (activeSnap && !isMobile()) {
+        win.classList.remove('maximized', 'snapped-left', 'snapped-right');
+        
+        if (activeSnap === 'left') {
+          win.classList.add('snapped-left');
+        } else if (activeSnap === 'right') {
+          win.classList.add('snapped-right');
+        } else if (activeSnap === 'top') {
+          win.classList.add('maximized');
+        }
+        activeSnap = null;
+      }
+    });
+    
+    handle.addEventListener('pointercancel', () => {
+      dragging = false;
+      hideSnapGhost();
+      activeSnap = null;
+    });
+  });
+
+  function showSnapGhost(x, y, w, h) {
+    snapPreview.style.left = x + 'px';
+    snapPreview.style.top = y + 'px';
+    snapPreview.style.width = w + 'px';
+    snapPreview.style.height = h + 'px';
+    snapPreview.style.opacity = '1';
+  }
+
+  function hideSnapGhost() {
+    snapPreview.style.opacity = '0';
+  }
+
+  // ===== brand dropdown menu =====
+  const brandMenuBtn = document.getElementById('brand-menu-btn');
+  const brandDropdown = document.getElementById('brand-dropdown');
+  
+  // Set initial reduce motion status text
+  const motionStatusText = document.getElementById('motion-status-text');
+  if (motionStatusText) {
+    motionStatusText.textContent = reduceMotion ? 'ON' : 'OFF';
+  }
+
+  function toggleBrandDropdown(show) {
+    const shouldShow = show !== undefined ? show : !brandDropdown.classList.contains('active');
+    if (shouldShow) {
+      brandDropdown.style.display = 'flex';
+      brandMenuBtn.classList.add('active');
+      brandMenuBtn.setAttribute('aria-expanded', 'true');
+      setTimeout(() => brandDropdown.classList.add('active'), 10);
+    } else {
+      brandDropdown.classList.remove('active');
+      brandMenuBtn.classList.remove('active');
+      brandMenuBtn.setAttribute('aria-expanded', 'false');
+      setTimeout(() => {
+        if (!brandDropdown.classList.contains('active')) {
+          brandDropdown.style.display = 'none';
+        }
+      }, 150);
+    }
+  }
+
+  brandMenuBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleBrandDropdown();
+  });
+
+  document.getElementById('menu-about-build').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleBrandDropdown(false);
+    openWindow('about-build');
+  });
+
+  document.getElementById('menu-restart-tour').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleBrandDropdown(false);
+    startTour();
+  });
+
+  document.getElementById('menu-toggle-motion').addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleReduceMotion();
+  });
+
+  // Close dropdown on click outside
+  window.addEventListener('click', () => {
+    toggleBrandDropdown(false);
   });
 
   // close all open windows at once

@@ -142,7 +142,7 @@
   .dock{
     position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
     z-index:300;
-    display:flex; align-items:flex-end; gap:10px;
+    display:flex; flex-wrap:nowrap; align-items:flex-end; gap:10px;
     padding:10px 14px 8px;
     background:rgba(255,255,255,0.14);
     border:1px solid rgba(255,255,255,0.25);
@@ -327,15 +327,16 @@
 
   @media (max-width: 480px) {
     .dock {
+      flex-wrap: nowrap !important;
       gap: 4px;
       padding: 5px 6px;
       border-radius: 14px;
       bottom: 8px;
     }
     .dock-icon {
-      width: clamp(32px, 8.5vw, 38px);
-      height: clamp(32px, 8.5vw, 38px);
-      font-size: clamp(15px, 4vw, 18px);
+      width: clamp(28px, 8.5vw, 38px);
+      height: clamp(28px, 8.5vw, 38px);
+      font-size: clamp(14px, 4vw, 18px);
       border-radius: 8px;
     }
     .menubar { padding: 0 6px; }

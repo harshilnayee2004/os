@@ -2224,20 +2224,6 @@
       }
     });
   });
-
-  // ===== background line waves shader =====
-  function initLineWaves() {
-    const container = document.getElementById('desktop');
-    if (!container) return;
-
-    const canvas = document.createElement('canvas');
-    canvas.className = 'line-waves-canvas';
-    container.insertBefore(canvas, container.firstChild);
-
-    const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false }) || 
-               canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false });
-    if (!gl) return;
-
   // ===== background color bends shader =====
   function initColorBends() {
     const container = document.getElementById('desktop');

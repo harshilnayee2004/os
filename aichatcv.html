@@ -239,24 +239,24 @@
   const QA = {
     built: {
       q:"What have you built?",
-      a:"Mostly real things for real clients. A health-checkup management system for a medical center (Aster Medcare), a rebuilt fast static site with WhatsApp deep-link purchasing for a food products brand, and venue marketplace strategy (Venme.in).",
+      a:"Mostly real things for real clients. A health-checkup management system for a medical center (**Aster Medcare**), a rebuilt fast static site with **WhatsApp deep-link purchasing** for a food products brand, and venue marketplace strategy (**Venme.in**).",
       next:["aster","stack"]
     },
     aster: {
       q:"Tell me about Aster Medcare",
-      a:"A health checkup management system for a medical center. Built with React/Vite, Node/Express, and MongoDB. Handles 500+ daily checkups. Shipped features like a custom PDF generation engine, CR-80 ID generator with QR, and a staged multi-sheet Excel bulk import. I also led a security audit, adding brute-force rate limiting and migrating plaintext government ID storage to AES-256-GCM encryption.",
+      a:"A health checkup management system for a medical center. Built with **React/Vite, Node/Express, and MongoDB**. Handles **500+ daily checkups**. Shipped features like a **custom PDF generation engine**, CR-80 ID generator with QR, and a staged multi-sheet Excel bulk import. I also led a security audit, adding brute-force rate limiting and migrating plaintext government ID storage to **AES-256-GCM encryption**.",
       stat:"<b>500+</b> daily checkups · <b>15+</b> staff users · <b>24</b> dynamic forms",
       tags:["React","Node.js","MongoDB","Cloudflare R2"],
       next:["stack","ai"]
     },
     stack: {
       q:"What's your tech stack?",
-      a:"Frontend: React.js, Next.js, Angular, HTML5, CSS3, JavaScript (ES6+), Tailwind CSS, jQuery. Backend: Node.js, Express.js, REST APIs, Socket.io, MongoDB, Mongoose, JWT/RBAC. Cloud/DevOps: Vercel, Render, AWS Lightsail, Cloudflare R2, MongoDB Atlas, Docker, GitHub Actions. AI: Gemini API, Prompt Engineering, Python.",
+      a:"**Frontend**: React.js, Next.js, Angular, HTML5, CSS3, JavaScript (ES6+), Tailwind CSS, jQuery.<br><br>**Backend**: Node.js, Express.js, REST APIs, Socket.io, MongoDB, Mongoose, JWT/RBAC.<br><br>**Cloud/DevOps**: Vercel, Render, AWS Lightsail, Cloudflare R2, MongoDB Atlas, Docker, GitHub Actions.<br><br>**AI/Tools**: Gemini API, Prompt Engineering, Python.",
       next:["ai","intern"]
     },
     ai: {
       q:"Why full-stack + AI?",
-      a:"Because most clients don't just need a website — they need the busywork gone. I build the product in MERN, then wire in Gemini API integrations or LLM-powered automation so it actually saves them time, not just looks good.",
+      a:"Because most clients don't just need a website — they need the busywork gone. I build the product in **MERN**, then wire in **Gemini API integrations** or **LLM-powered automation** so it actually saves them time, not just looks good.",
       next:["built","education"]
     },
     intern: {
@@ -266,12 +266,12 @@
     },
     education: {
       q:"What's your education?",
-      a:"B.Tech, Computer Science Engineering at Ganpat University, Gujarat — expected 2027, currently in 7th semester. Plus a handful of certifications: CCNA, Docker Essentials, Java Fundamentals, Python (DataCamp + Cisco), and Cisco's Modern AI track.",
+      a:"**B.Tech, Computer Science Engineering** at Ganpat University, Gujarat — expected 2027, currently in 7th semester. Plus a handful of certifications: **CCNA**, **Docker Essentials**, **Java Fundamentals**, **Python** (DataCamp + Cisco), and Cisco's **Modern AI track**.",
       next:["contact"]
     },
     contact: {
       q:"How do I reach you?",
-      a:"Email is fastest — harshilnayee2004@gmail.com. Also reachable on LinkedIn and GitHub, links below.",
+      a:"Email is fastest — **harshilnayee2004@gmail.com**. Also reachable on LinkedIn and GitHub, links below.",
       next:["everything"]
     },
     everything: {
@@ -292,6 +292,13 @@
     { id:'built', keys:['built','build','project','work','made','done'] },
     { id:'everything', keys:['everything','resume','cv','summary','all'] }
   ];
+
+  function formatMarkdown(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/`/g, '<code>$1</code>');
+  }
 
   const thread = document.getElementById('thread');
   const intro = document.getElementById('intro');
@@ -341,7 +348,7 @@
       bubble.appendChild(textSpan);
 
       if(reduceMotion){
-        textSpan.textContent = item.a;
+        textSpan.innerHTML = formatMarkdown(item.a);
         finishBubble(bubble, item);
         return;
       }
@@ -359,6 +366,7 @@
         if(i >= words.length){
           clearInterval(typer);
           cursor.remove();
+          textSpan.innerHTML = formatMarkdown(item.a);
           finishBubble(bubble, item);
         }
       }, 32);
@@ -410,11 +418,27 @@
   }
 
   function matchFreeText(text){
-    const lower = text.toLowerCase();
+    const lower = text.toLowerCase().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g," ");
+    let bestId = null;
+    let maxScore = 0;
     for(const k of KEYWORDS){
-      if(k.keys.some(word => lower.includes(word))) return k.id;
+      let score = 0;
+      for(const word of k.keys) {
+        if(lower.includes(word)) {
+          score += 1;
+          const regex = new RegExp('\\b' + word + '\\b', 'g');
+          const matches = lower.match(regex);
+          if (matches) {
+            score += matches.length * 1.5;
+          }
+        }
+      }
+      if(score > maxScore){
+        maxScore = score;
+        bestId = k.id;
+      }
     }
-    return null;
+    return bestId;
   }
 
   form.addEventListener('submit', (e) => {
@@ -430,9 +454,16 @@
     if(matched){
       setTimeout(() => addAssistantBubble(QA[matched]), 250);
     } else {
+      const fallbacks = [
+        "Interesting query! I'm not fully briefed on that topic yet. Try asking about my **tech stack**, **work experience**, **projects**, or **internship status**!",
+        "That's a bit beyond my portfolio scope. Feel free to ask about my MERN development, Aster Medcare checkups, or CCNA certification!",
+        "Hmm, I didn't quite catch that. You can try asking about my certifications, Ganpat University education, or full-stack freelance history!",
+        "Good question! I'm trained on Harshil's resume database. Try asking about his projects, skills, contact details, or resume summary!"
+      ];
+      const randomFallback = fallbacks[Math.floor(Math.random() * fallbacks.length)];
       setTimeout(() => addAssistantBubble({
-        a:"Good question — that's a bit specific for me to guess. Try one of these, or email me directly and I'll answer properly.",
-        next:["built","stack","intern","contact"]
+        a: randomFallback,
+        next: ["built","stack","intern","contact"]
       }), 250);
     }
   });

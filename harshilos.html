@@ -147,15 +147,14 @@
   .dock{
     position:fixed; bottom:14px; left:50%; transform:translateX(-50%);
     z-index:300;
-    display:flex; flex-wrap:nowrap; align-items:flex-end; gap:10px;
+    display:flex; flex-wrap:nowrap; align-items:flex-end; gap:12px;
     padding:10px 14px 8px;
-    background: rgba(20, 15, 35, 0.55);
-    border: 1px solid rgba(255,255,255,0.05);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-radius:22px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 0 0 40px rgba(147, 51, 234, 0.15);
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(24px) saturate(160%);
+    -webkit-backdrop-filter: blur(24px) saturate(160%);
+    border-radius:24px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 30px 60px -20px rgba(124, 58, 237, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
   }
   .dock-icon{
     position:relative;
@@ -163,7 +162,7 @@
     border-radius:14px;
     display:flex; align-items:center; justify-content:center;
     transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.35), inset 0 -2px 3px rgba(0,0,0,0.25);
     border: 1px solid rgba(255,255,255,0.15);
     overflow: hidden;
   }
@@ -177,20 +176,20 @@
     pointer-events: none;
     z-index: 2;
   }
-  .dock-icon[data-win="about"] { background: linear-gradient(135deg, #e27a66, #c95e4b, #a84534); }
-  .dock-icon[data-win="skills"] { background: linear-gradient(135deg, #539ec4, #3c7cb5, #265994); }
-  .dock-icon[data-win="experience"] { background: linear-gradient(135deg, #3ca8ad, #1b7a99, #0c705c); }
-  .dock-icon[data-win="projects"] { background: linear-gradient(135deg, #363b4c, #262a38, #161821); }
-  .dock-icon[data-win="ai"] { background: linear-gradient(135deg, #8544bf, #5e1ca6, #3d1073); }
-  .dock-icon[data-win="education"] { background: linear-gradient(135deg, #37ad9a, #1b8279, #147a43); }
-  .dock-icon[data-win="certifications"] { background: linear-gradient(135deg, #db9035, #bd6f1e, #9e4a02); }
-  .dock-icon[data-win="contact"] { background: linear-gradient(135deg, #db585c, #c43356, #9c143d); }
+  .dock-icon[data-win="about"] { background: linear-gradient(135deg, #FF8A65, #FF5252); }
+  .dock-icon[data-win="skills"] { background: linear-gradient(135deg, #4FC3F7, #2979FF); }
+  .dock-icon[data-win="experience"] { background: linear-gradient(135deg, #26C6DA, #00838F); }
+  .dock-icon[data-win="projects"] { background: linear-gradient(135deg, #35294f, #1a122d); }
+  .dock-icon[data-win="ai"] { background: linear-gradient(135deg, #9C27B0, #6A1B9A); }
+  .dock-icon[data-win="education"] { background: linear-gradient(135deg, #26DE81, #10AC84); }
+  .dock-icon[data-win="certifications"] { background: linear-gradient(135deg, #FFA726, #FB8C00); }
+  .dock-icon[data-win="contact"] { background: linear-gradient(135deg, #EC407A, #C2185B); }
 
   /* macOS ripple styles driven by JS */
   .dock-icon.dock-hover-self {
     transform: translateY(-4px) scale(1.1);
-    box-shadow: 0 10px 24px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.25), 0 0 8px rgba(255,255,255,0.1);
-    filter: brightness(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45), inset 0 -2px 3px rgba(0,0,0,0.3);
+    filter: brightness(1.08);
     z-index: 10;
   }
   .dock-icon.dock-hover-neighbor {

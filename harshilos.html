@@ -308,11 +308,9 @@
     line-height: 1.4;
   }
 
-  /* ============ MUSIC WIDGET ============ */
-  .music-widget {
+  /* ============ DESKTOP WIDGETS (DRAGGABLE & COLLAPSIBLE) ============ */
+  .drag-widget {
     position: absolute;
-    bottom: 84px;
-    right: 20px;
     z-index: 10;
     width: 220px;
     padding: 12px;
@@ -325,28 +323,91 @@
     flex-direction: column;
     gap: 8px;
     color: #fff;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease, width 0.3s ease, height 0.3s ease;
+    cursor: move;
   }
-  body[data-theme="light"] .music-widget {
+  body[data-theme="light"] .drag-widget {
     background: rgba(255, 255, 255, 0.35);
     border: 1px solid rgba(0, 0, 0, 0.08);
     color: #111122;
   }
-  .music-widget:hover {
-    transform: translateY(-2px);
-  }
-  .music-header {
+  .widget-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
+  }
+  .widget-title {
     font-size: 9px;
     font-weight: 700;
     letter-spacing: 0.05em;
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
   }
-  body[data-theme="light"] .music-header {
+  body[data-theme="light"] .widget-title {
     color: rgba(0, 0, 0, 0.5);
+  }
+  .widget-toggle {
+    background: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 2px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+  .widget-toggle:hover {
+    opacity: 1;
+  }
+  .widget-body {
+    cursor: pointer;
+  }
+
+  /* Notes widget customisations */
+  .notes-widget {
+    bottom: 180px;
+    right: 20px;
+  }
+  .note-preview-text {
+    font-size: 11px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  body[data-theme="light"] .note-preview-text {
+    color: rgba(0, 0, 0, 0.8);
+  }
+  .notes-widget.minimized {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .notes-widget.minimized .widget-header,
+  .notes-widget.minimized .note-preview-text {
+    display: none;
+  }
+  .notes-widget.minimized .widget-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+    margin: 0;
+  }
+
+  /* Music widget customisations */
+  .music-widget {
+    bottom: 84px;
+    right: 20px;
   }
   .music-body {
     display: flex;
@@ -354,14 +415,24 @@
     gap: 10px;
   }
   .music-album-art {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #1db954, #191414);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FF3366, #FF9933, #00FFFF);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    position: relative;
+    transition: box-shadow 0.3s ease;
+    flex-shrink: 0;
+  }
+  .music-album-art.playing {
+    animation: albumPulse 1.8s infinite;
+  }
+  @keyframes albumPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(255, 51, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
   }
   .music-info {
     flex-grow: 1;
@@ -379,6 +450,23 @@
   }
   body[data-theme="light"] .music-artist {
     color: rgba(0, 0, 0, 0.7);
+  }
+  .music-progress-container {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 1.5px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+  body[data-theme="light"] .music-progress-container {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  .music-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: #1db954;
+    border-radius: 1.5px;
   }
   .music-controls {
     display: flex;
@@ -1206,6 +1294,113 @@
   .dropdown-item:hover .toggle-status {
     background: rgba(255, 255, 255, 0.25);
   }
+  /* ============ MOBILE RESPONSIVENESS ============ */
+  @media (max-width: 768px) {
+    .win {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      top: auto !important;
+      right: 0 !important;
+      width: 100% !important;
+      height: 80% !important;
+      border-radius: 20px 20px 0 0 !important;
+      transform: translateY(100%) !important;
+      transition: transform 0.35s cubic-bezier(0.1, 0.76, 0.55, 0.94) !important;
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3) !important;
+    }
+    .win.opening {
+      transform: translateY(0) !important;
+    }
+    .win.closing {
+      transform: translateY(100%) !important;
+    }
+    .win[style*="display: flex"] {
+      transform: translateY(0) !important;
+    }
+    
+    .win-titlebar {
+      cursor: default !important;
+    }
+    
+    .win-btn.min, .win-btn.max {
+      display: none !important;
+    }
+
+    .dock {
+      width: 95% !important;
+      max-width: 480px !important;
+      padding: 6px 12px !important;
+      gap: 12px !important;
+      overflow-x: auto !important;
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      justify-content: flex-start !important;
+      height: 60px !important;
+      bottom: 10px !important;
+      border-radius: 20px !important;
+    }
+    .dock-icon {
+      width: 36px !important;
+      height: 36px !important;
+      flex-shrink: 0 !important;
+    }
+    .dock-icon:hover {
+      transform: none !important;
+    }
+    .dock-label {
+      display: none !important;
+    }
+
+    .music-widget, .notes-widget {
+      position: fixed !important;
+      bottom: 80px !important;
+      top: auto !important;
+      width: calc(50% - 15px) !important;
+      max-width: 240px !important;
+      z-index: 100 !important;
+    }
+    .music-widget {
+      right: 10px !important;
+      left: auto !important;
+    }
+    .notes-widget {
+      left: 10px !important;
+      right: auto !important;
+    }
+    .notes-widget.minimized {
+      width: 44px !important;
+      height: 44px !important;
+      border-radius: 50% !important;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .music-widget, .notes-widget {
+      width: calc(100% - 20px) !important;
+      left: 10px !important;
+      right: 10px !important;
+    }
+    .music-widget {
+      bottom: 80px !important;
+    }
+    .notes-widget {
+      bottom: 172px !important;
+    }
+    .notes-widget.minimized {
+      width: 44px !important;
+      height: 44px !important;
+      bottom: 172px !important;
+      left: 10px !important;
+      right: auto !important;
+    }
+    .mb-right .mb-link {
+      display: none !important;
+    }
+    .mb-right #tourBtn {
+      display: inline-block !important;
+    }
+  }
 
 </style>
 </head>
@@ -1544,16 +1739,30 @@
       </div>
     </div>
 
+    <!-- ===== NOTES WIDGET ===== -->
+    <div class="notes-widget drag-widget" id="notes-widget">
+      <div class="widget-header" id="notes-widget-header">
+        <span class="widget-title">📝 Note Preview</span>
+        <button class="widget-toggle" onclick="toggleNotesWidget(event)" id="notes-widget-toggle-btn">➖</button>
+      </div>
+      <div class="widget-body" onclick="notesWidgetClick()">
+        <div class="note-preview-text" id="note-widget-preview">Loading note preview...</div>
+      </div>
+    </div>
+
     <!-- ===== MUSIC WIDGET ===== -->
-    <div class="music-widget" id="music-widget">
-      <div class="music-header">
-        <span>🟢 Now Playing</span>
+    <div class="music-widget drag-widget" id="music-widget">
+      <div class="widget-header" id="music-widget-header">
+        <span class="widget-title">🟢 Now Playing</span>
       </div>
       <div class="music-body">
-        <div class="music-album-art">🎧</div>
+        <div class="music-album-art playing" id="music-album-art">🎨</div>
         <div class="music-info">
-          <div class="music-title" id="music-title">Lofi Chill Beats</div>
-          <div class="music-artist" id="music-artist">Coding Session</div>
+          <div class="music-title" id="music-title">Deep Focus</div>
+          <div class="music-artist" id="music-artist">Lo-Fi Coding Beats</div>
+          <div class="music-progress-container">
+            <div class="music-progress-bar" id="music-progress-bar"></div>
+          </div>
         </div>
         <div class="music-visualizer">
           <div class="music-bar active"></div>
@@ -2836,6 +3045,15 @@
   let currentNoteId = 'learning';
   const textarea = document.getElementById('notes-textarea');
 
+  function updateNotesWidgetPreview() {
+    const previewEl = document.getElementById('note-widget-preview');
+    if (previewEl) {
+      const lines = notesData.scratchpad.split('\n');
+      const firstTwoLines = lines.slice(0, 2).join('<br>');
+      previewEl.innerHTML = firstTwoLines || 'Empty Scratchpad...';
+    }
+  }
+
   function loadNotes() {
     const savedNotes = localStorage.getItem('notes_data');
     if (savedNotes) {
@@ -2845,6 +3063,7 @@
       } catch (e) {}
     }
     switchNote('learning');
+    updateNotesWidgetPreview();
   }
 
   function switchNote(id) {
@@ -2863,9 +3082,106 @@
   textarea.addEventListener('input', () => {
     notesData[currentNoteId] = textarea.value;
     localStorage.setItem('notes_data', JSON.stringify(notesData));
+    updateNotesWidgetPreview();
   });
 
   loadNotes();
+
+  // ===== NOTES WIDGET ACTIONS =====
+  let notesWidgetMinimized = localStorage.getItem('notes_widget_min') === 'true';
+  function updateNotesWidgetState() {
+    const widget = document.getElementById('notes-widget');
+    const btn = document.getElementById('notes-widget-toggle-btn');
+    if (widget && btn) {
+      if (notesWidgetMinimized) {
+        widget.classList.add('minimized');
+        btn.textContent = '➕';
+        widget.title = "Click to Expand Notes Preview";
+      } else {
+        widget.classList.remove('minimized');
+        btn.textContent = '➖';
+        widget.title = "";
+      }
+    }
+  }
+  function toggleNotesWidget(e) {
+    e.stopPropagation();
+    notesWidgetMinimized = !notesWidgetMinimized;
+    localStorage.setItem('notes_widget_min', notesWidgetMinimized);
+    updateNotesWidgetState();
+    playSystemSound('click');
+  }
+  function notesWidgetClick() {
+    openWindow('notes');
+    switchNote('scratchpad');
+  }
+  updateNotesWidgetState();
+
+  // ===== DRAGGABLE WIDGETS LOGIC =====
+  function makeWidgetDraggable(el, storageKey) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    const header = document.getElementById(el.id + '-header') || el;
+    header.onmousedown = dragMouseDown;
+    header.ontouchstart = dragMouseDown;
+
+    const savedPos = localStorage.getItem(storageKey);
+    if (savedPos) {
+      try {
+        const { left, top } = JSON.parse(savedPos);
+        el.style.left = left;
+        el.style.top = top;
+        el.style.bottom = 'auto';
+        el.style.right = 'auto';
+      } catch(e) {}
+    }
+
+    function dragMouseDown(e) {
+      if (window.innerWidth <= 768) return;
+      e = e || window.event;
+      if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
+        e.preventDefault();
+      }
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      pos3 = clientX;
+      pos4 = clientY;
+      document.onmouseup = closeDragElement;
+      document.ontouchend = closeDragElement;
+      document.onmousemove = elementDrag;
+      document.ontouchmove = elementDrag;
+      playSystemSound('click');
+    }
+
+    function elementDrag(e) {
+      e = e || window.event;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      pos1 = pos3 - clientX;
+      pos2 = pos4 - clientY;
+      pos3 = clientX;
+      pos4 = clientY;
+      let newTop = el.offsetTop - pos2;
+      let newLeft = el.offsetLeft - pos1;
+      newTop = Math.max(50, Math.min(newTop, window.innerHeight - el.offsetHeight - 20));
+      newLeft = Math.max(10, Math.min(newLeft, window.innerWidth - el.offsetWidth - 20));
+      el.style.top = newTop + "px";
+      el.style.left = newLeft + "px";
+      el.style.bottom = "auto";
+      el.style.right = "auto";
+    }
+
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.ontouchend = null;
+      document.onmousemove = null;
+      document.ontouchmove = null;
+      const coords = { left: el.style.left, top: el.style.top };
+      localStorage.setItem(storageKey, JSON.stringify(coords));
+    }
+  }
+
+  makeWidgetDraggable(document.getElementById('notes-widget'), 'notes_widget_pos');
+  makeWidgetDraggable(document.getElementById('music-widget'), 'music_widget_pos');
 
   // ===== RIGHT-CLICK CONTEXT MENU =====
   const contextMenu = document.getElementById('desktop-context-menu');
@@ -2885,6 +3201,29 @@
     contextMenu.style.display = 'none';
   });
 
+  // Touch Long Press context menu for mobile
+  let touchTimeout = null;
+  window.addEventListener('touchstart', (e) => {
+    if (e.target.id === 'desktop' || e.target.id === 'desktop-context-menu' || e.target.classList.contains('desktop-text')) {
+      if (touchTimeout) clearTimeout(touchTimeout);
+      touchTimeout = setTimeout(() => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        contextMenu.style.left = touch.clientX + 'px';
+        contextMenu.style.top = touch.clientY + 'px';
+        contextMenu.style.display = 'block';
+        playSystemSound('click');
+      }, 600);
+    }
+  }, { passive: false });
+
+  window.addEventListener('touchend', () => {
+    if (touchTimeout) clearTimeout(touchTimeout);
+  });
+  window.addEventListener('touchmove', () => {
+    if (touchTimeout) clearTimeout(touchTimeout);
+  });
+
   function refreshDesktop() {
     playSystemSound('click');
     const desktop = document.getElementById('desktop');
@@ -2896,9 +3235,9 @@
 
   // ===== SPOTIFY NOW PLAYING WIDGET =====
   const tracksList = [
-    { title: "Lofi Chill Beats", artist: "Coding Session" },
-    { title: "Sonoma Morning Beats", artist: "Chill Station" },
-    { title: "Midnight Hacker", artist: "Synthwave Instrumental" }
+    { title: "Deep Focus", artist: "Lo-Fi Coding Beats" },
+    { title: "Night Shift", artist: "Synthwave Sessions" },
+    { title: "Coffee & Compile", artist: "Acoustic Coffeehouse" }
   ];
   let currentTrackIdx = 0;
   let isMusicPlaying = true;
@@ -2906,6 +3245,31 @@
   const musicArtistEl = document.getElementById('music-artist');
   const musicBars = document.querySelectorAll('.music-bar');
   const musicPlayBtn = document.getElementById('music-play-btn');
+  const albumArtEl = document.getElementById('music-album-art');
+  const musicProgressBar = document.getElementById('music-progress-bar');
+  
+  let musicProgress = 0;
+  let musicProgressInterval = null;
+
+  function startProgressBar() {
+    if (musicProgressInterval) clearInterval(musicProgressInterval);
+    musicProgressInterval = setInterval(() => {
+      if (isMusicPlaying) {
+        musicProgress += 0.5;
+        if (musicProgress >= 100) {
+          musicProgress = 0;
+          nextTrack();
+        }
+        if (musicProgressBar) {
+          musicProgressBar.style.width = musicProgress + '%';
+        }
+      }
+    }, 100);
+  }
+
+  function stopProgressBar() {
+    if (musicProgressInterval) clearInterval(musicProgressInterval);
+  }
 
   function togglePlayMusic() {
     isMusicPlaying = !isMusicPlaying;
@@ -2914,6 +3278,14 @@
     musicBars.forEach(bar => {
       bar.classList.toggle('active', isMusicPlaying);
     });
+    if (albumArtEl) {
+      albumArtEl.classList.toggle('playing', isMusicPlaying);
+    }
+    if (isMusicPlaying) {
+      startProgressBar();
+    } else {
+      stopProgressBar();
+    }
   }
 
   function nextTrack() {
@@ -2921,10 +3293,14 @@
     currentTrackIdx = (currentTrackIdx + 1) % tracksList.length;
     musicTitleEl.textContent = tracksList[currentTrackIdx].title;
     musicArtistEl.textContent = tracksList[currentTrackIdx].artist;
+    musicProgress = 0;
+    if (musicProgressBar) musicProgressBar.style.width = '0%';
     if (!isMusicPlaying) {
       togglePlayMusic();
     }
   }
+
+  startProgressBar();
 
   // ===== RECRUITER NOTIFICATION TOAST =====
   const toast = document.getElementById('notification-toast');

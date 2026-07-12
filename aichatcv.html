@@ -239,22 +239,15 @@
   const QA = {
     built: {
       q:"What have you built?",
-      a:"Mostly real things for real clients. A health-checkup management system for a medical center (Aster Medcare), a B2B wholesale jewellery portal (Yash Ornaments), a rebuilt fast static site with WhatsApp deep-link purchasing for a food products brand, and venue marketplace strategy (Venme.in).",
-      next:["aster","yash"]
+      a:"Mostly real things for real clients. A health-checkup management system for a medical center (Aster Medcare), a rebuilt fast static site with WhatsApp deep-link purchasing for a food products brand, and venue marketplace strategy (Venme.in).",
+      next:["aster","stack"]
     },
     aster: {
       q:"Tell me about Aster Medcare",
       a:"A health checkup management system for a medical center. Built with React/Vite, Node/Express, and MongoDB. Handles 500+ daily checkups. Shipped features like a custom PDF generation engine, CR-80 ID generator with QR, and a staged multi-sheet Excel bulk import. I also led a security audit, adding brute-force rate limiting and migrating plaintext government ID storage to AES-256-GCM encryption.",
       stat:"<b>500+</b> daily checkups · <b>15+</b> staff users · <b>24</b> dynamic forms",
       tags:["React","Node.js","MongoDB","Cloudflare R2"],
-      next:["yash","stack"]
-    },
-    yash: {
-      q:"Tell me about Yash Ornaments",
-      a:"A B2B wholesale jewellery portal for a gold dealer network in Ahmedabad. Gated catalog with admin approval, bulk inquiry management, and a buyer analytics dashboard, deployed on a Vercel + EC2 + Atlas + R2 stack.",
-      stat:"<b>2TB+</b> of product data managed end-to-end",
-      tags:["React","Node.js","MongoDB Atlas","Cloudflare R2"],
-      next:["aster","stack"]
+      next:["stack","ai"]
     },
     stack: {
       q:"What's your tech stack?",
@@ -291,7 +284,6 @@
 
   const KEYWORDS = [
     { id:'aster', keys:['aster','medcare','checkup','health'] },
-    { id:'yash', keys:['yash','ornament','jewellery','jewelry','gold'] },
     { id:'stack', keys:['stack','tech','technology','language','framework'] },
     { id:'ai', keys:['ai','genai','gemini','llm','automation'] },
     { id:'intern', keys:['intern','full-time','full time','job','hire','available','availability'] },
@@ -398,7 +390,7 @@
         <div class="srow"><span class="slabel">Role</span><span class="sval">Full Stack Developer (MERN) · AI &amp; GenAI Integration</span></div>
         <div class="srow"><span class="slabel">Location</span><span class="sval">Ahmedabad, Gujarat, India</span></div>
         <div class="srow"><span class="slabel">Experience</span><span class="sval">2+ years freelance</span></div>
-        <div class="srow"><span class="slabel">Highlights</span><span class="sval">Aster Medcare (500+ daily checkups), Yash Ornaments (2TB+ data managed)</span></div>
+        <div class="srow"><span class="slabel">Highlights</span><span class="sval">Aster Medcare (500+ daily checkups), Vercel static migrations</span></div>
         <div class="srow"><span class="slabel">Education</span><span class="sval">B.Tech CSE, Ganpat University — Expected 2027 (7th Sem)</span></div>
         <div class="srow"><span class="slabel">Contact</span><span class="sval"><a href="mailto:harshilnayee2004@gmail.com">Email</a> · <a href="https://www.linkedin.com/in/harshil-nayee-cse2004" target="_blank" rel="noopener">LinkedIn</a> · <a href="https://github.com/harshilnayee2004" target="_blank" rel="noopener">GitHub</a></span></div>
       `;

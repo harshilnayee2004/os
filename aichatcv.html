@@ -279,6 +279,11 @@
       a:"Here's the condensed version:",
       summary:true,
       next:[]
+    },
+    greeting: {
+      q:"Hello!",
+      a:"Hello there! 👋 I'm Harshil's AI assistant. Ask me anything about my **MERN stack development**, client projects like **Aster Medcare**, or **internship availability**! Choose one of the options below or type your own question.",
+      next:["built","stack","intern","contact"]
     }
   };
 
@@ -290,7 +295,8 @@
     { id:'education', keys:['education','degree','university','college','cert'] },
     { id:'contact', keys:['contact','email','phone','reach','linkedin','github'] },
     { id:'built', keys:['built','build','project','work','made','done'] },
-    { id:'everything', keys:['everything','resume','cv','summary','all'] }
+    { id:'everything', keys:['everything','resume','cv','summary','all'] },
+    { id:'greeting', keys:['hi','hello','hey','greetings','hola','sup','yo','morning','afternoon','evening'] }
   ];
 
   function formatMarkdown(text) {

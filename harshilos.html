@@ -1516,6 +1516,11 @@
       a:"Here's the condensed version:",
       summary:true,
       next:[]
+    },
+    greeting: {
+      q:"Hello!",
+      a:"Hello there! 👋 I'm Harshil's AI assistant. Ask me anything about my **MERN stack development**, client projects like **Aster Medcare**, or **internship availability**! Choose one of the options below or type your own question.",
+      next:["built","stack","intern","contact"]
     }
   };
 
@@ -1533,7 +1538,8 @@
     { id:'projects', keys:['projects','websites','apps'] },
     { id:'certifications', keys:['certs','certifications','cisco','ibm','python essentials','ccna','docker'] },
     { id:'everything', keys:['everything','resume','cv','summary','all'] },
-    { id:'tour', keys:['tour','guide','tutorial','help','onboard'] }
+    { id:'tour', keys:['tour','guide','tutorial','help','onboard'] },
+    { id:'greeting', keys:['hi','hello','hey','greetings','hola','sup','yo','morning','afternoon','evening'] }
   ];
 
   function formatMarkdown(text) {

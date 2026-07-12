@@ -1797,8 +1797,9 @@
       <div class="music-header" id="music-widget-header">
         <span>🟢 Now Playing</span>
       </div>
-      <div class="music-body">
-        <div class="music-album-art playing" id="music-album-art">🐻</div>
+        <div class="music-album-art playing" id="music-album-art" style="overflow: hidden; background: none;">
+          <img src="bully.jpg" alt="Bully" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;" />
+        </div>
         <div class="music-info">
           <div class="music-title" id="music-title">Stronger</div>
           <div class="music-artist" id="music-artist">Kanye West</div>
@@ -3284,22 +3285,25 @@
   // ===== SPOTIFY NOW PLAYING WIDGET =====
   const tracksList = [
     { 
+      title: "ALL THE LOVE (feat. Andre Troutman)", 
+      artist: "Kanye West, Ye, Andre Troutman", 
+      art: "none",
+      img: "bully.jpg",
+      symbol: ""
+    },
+    { 
       title: "Stronger", 
       artist: "Kanye West", 
       art: "linear-gradient(135deg, #7b1fa2, #e040fb, #3f51b5)", 
+      img: "",
       symbol: "🐻"
     },
     { 
       title: "Power", 
       artist: "Kanye West", 
       art: "linear-gradient(135deg, #d50000, #ff1744, #880e4f)", 
+      img: "",
       symbol: "👑"
-    },
-    { 
-      title: "Flashing Lights", 
-      artist: "Kanye West", 
-      art: "linear-gradient(135deg, #0d47a1, #00b0ff, #aa00ff)", 
-      symbol: "⚡"
     }
   ];
   let currentTrackIdx = 0;
@@ -3364,8 +3368,13 @@
     musicTitleEl.textContent = track.title;
     musicArtistEl.textContent = track.artist;
     if (albumArtEl) {
-      albumArtEl.style.background = track.art;
-      albumArtEl.textContent = track.symbol;
+      if (track.img) {
+        albumArtEl.style.background = 'none';
+        albumArtEl.innerHTML = `<img src="${track.img}" alt="Album Art" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;" />`;
+      } else {
+        albumArtEl.style.background = track.art;
+        albumArtEl.innerHTML = track.symbol;
+      }
     }
     musicProgress = 0;
     if (musicProgressBar) musicProgressBar.style.width = '0%';

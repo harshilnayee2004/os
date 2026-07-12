@@ -67,20 +67,28 @@
   #desktop{
     position:fixed; inset:0;
     overflow:hidden;
-    background:#000;
+    background: linear-gradient(135deg, #120c24 0%, #1c0e35 40%, #18092d 100%);
   }
-
-  .line-waves-canvas {
+  #desktop::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.6;
+    background: 
+      radial-gradient(circle at 10% 20%, rgba(109, 91, 208, 0.35) 0%, transparent 60%),
+      radial-gradient(circle at 90% 10%, rgba(31, 158, 142, 0.25) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(192, 80, 158, 0.3) 0%, transparent 60%),
+      radial-gradient(circle at 80% 90%, rgba(109, 91, 208, 0.25) 0%, transparent 50%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  #desktop canvas.line-waves-canvas {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
     z-index: 1;
-    transition: opacity 0.5s ease;
-  }
-  body.reduce-motion .line-waves-canvas {
-    opacity: 0;
   }
 
   /* ============ MENU BAR ============ */
@@ -364,7 +372,7 @@
       gap: 5px;
       padding: 6px 8px;
       border-radius: 16px;
-      bottom: 20px;
+      bottom: 10px;
     }
     .dock-icon {
       width: clamp(34px, 8.8vw, 44px);
@@ -383,14 +391,14 @@
       font-size: 16px !important;
     }
   }
- 
+
   @media (max-width: 480px) {
     .dock {
       flex-wrap: nowrap !important;
       gap: 4px;
       padding: 5px 6px;
       border-radius: 14px;
-      bottom: 24px;
+      bottom: 8px;
     }
     .dock-icon {
       width: clamp(28px, 8.5vw, 38px);
@@ -928,29 +936,29 @@
         <div class="cat-block">
           <div class="cat-label">Frontend</div>
           <div class="chip-row">
-            <span class="chip">React.js</span><span class="chip">Angular</span><span class="chip">HTML5</span>
-            <span class="chip">CSS3</span><span class="chip">JavaScript (ES6+)</span><span class="chip">jQuery</span>
+            <span class="chip">React.js</span><span class="chip">Next.js</span><span class="chip">Angular</span><span class="chip">HTML5</span>
+            <span class="chip">CSS3</span><span class="chip">JavaScript (ES6+)</span><span class="chip">Tailwind CSS</span><span class="chip">jQuery</span>
           </div>
         </div>
         <div class="cat-block">
           <div class="cat-label">Backend</div>
           <div class="chip-row">
-            <span class="chip">Node.js</span><span class="chip">Express.js</span><span class="chip">REST APIs</span>
+            <span class="chip">Node.js</span><span class="chip">Express.js</span><span class="chip">REST APIs</span><span class="chip">Socket.io</span>
             <span class="chip">MongoDB</span><span class="chip">Mongoose</span><span class="chip">JWT Auth</span><span class="chip">RBAC</span>
           </div>
         </div>
         <div class="cat-block">
-          <div class="cat-label">Cloud</div>
+          <div class="cat-label">Cloud &amp; DevOps</div>
           <div class="chip-row">
-            <span class="chip">Cloudflare R2</span><span class="chip">MongoDB Atlas</span><span class="chip">Vercel</span>
-            <span class="chip">Railway</span><span class="chip">Docker</span>
+            <span class="chip">Vercel</span><span class="chip">Render</span><span class="chip">AWS Lightsail</span><span class="chip">Cloudflare R2</span>
+            <span class="chip">MongoDB Atlas</span><span class="chip">Docker</span><span class="chip">GitHub Actions</span>
           </div>
         </div>
         <div class="cat-block">
           <div class="cat-label">AI &amp; Tools</div>
           <div class="chip-row">
-            <span class="chip">Gemini API</span><span class="chip">LLM Prompt Engineering</span><span class="chip">Git / GitHub</span>
-            <span class="chip">Postman</span><span class="chip">Figma</span><span class="chip">Python</span><span class="chip">SheetJS</span>
+            <span class="chip">Gemini API</span><span class="chip">LLM Prompt Engineering</span><span class="chip">AI-assisted/vibe-coded website development</span>
+            <span class="chip">pdf-lib</span><span class="chip">SheetJS</span><span class="chip">Recharts</span><span class="chip">Figma</span><span class="chip">Git / GitHub</span><span class="chip">Postman</span><span class="chip">Python</span>
           </div>
         </div>
       </div>
@@ -972,10 +980,12 @@
           <div class="org">Freelance</div>
           <div class="dates">2024 — Present</div>
           <ul>
-            <li>Built Aster Medcare, a health checkup management system — MERN stack, role-based access control, 24+ dynamic medical forms, bulk Excel import, Cloudflare R2 storage, and merged PDF generation for 500+ daily checkups across 15 staff.</li>
-            <li>Developed a B2B wholesale jewellery portal for Yash Ornaments (Ahmedabad) — gated catalog, bulk inquiry system, admin approval workflow, buyer analytics, and 2TB of product data managed end-to-end.</li>
-            <li>Built a multilingual inquiry website (English, Gujarati, Hindi) with WhatsApp deep-link integration for direct client contact via QR code on visiting cards.</li>
-            <li>Early-stage contributor for Venme.com (venue marketplace) — drove business strategy, product direction, and UI/UX improvements at a co-founder level.</li>
+            <li>Architected and shipped Aster Medcare, a production health-checkup management system (React/Vite, Node/Express, MongoDB Atlas) handling 500+ daily checkups across 15+ staff from role-based dashboards to a custom PDF engine that overlays patient data onto official government form templates.</li>
+            <li>Led a full security audit and remediation of the production system: closed an unauthenticated signature endpoint, patched a regex-injection vulnerability in patient search, added brute-force rate limiting, and migrated plaintext government ID storage to AES-256-GCM encryption.</li>
+            <li>Built key product features end-to-end: CR-80 ID card generator with QR codes, an analytics dashboard (Recharts), staged multi-sheet Excel bulk import with column-mapping UI, and an OTP-confirmation delete flow gated to admin role.</li>
+            <li>Rebuilt a legacy WordPress site into a fast static site for a food products client (HTML/CSS/JS on Vercel), adding a dual retail/bulk catalog and WhatsApp deep-link purchasing.</li>
+            <li>Adopted an AI-assisted development workflow using prompt engineering with LLMs (Claude, Gemini) to architect features, run security audits, and direct AI coding agents for faster full-stack delivery, including full websites built AI-first.</li>
+            <li>Operated at a co-founder level for Venme.in (venue marketplace) shaping product direction, business strategy, and UI/UX.</li>
           </ul>
         </div>
         <div class="job-block">
@@ -983,8 +993,7 @@
           <div class="org">Sarvamangal Enterprise</div>
           <div class="dates">Sep 2024 — Dec 2024</div>
           <ul>
-            <li>Digitized end-to-end business operations — Google Business Profile setup, local SEO, and Google Maps optimization for waterproofing and real estate segments.</li>
-            <li>Built a digital quotation system replacing manual paperwork, with automated report generation and staff training.</li>
+            <li>Digitized end-to-end business operations Google Business Profile, local SEO and built a digital quotation system replacing manual paperwork, with automated report generation; trained staff to operate independently post-handoff.</li>
           </ul>
         </div>
       </div>
@@ -1003,7 +1012,7 @@
       <div class="win-content">
         <div class="proj-block">
           <h4>Aster Medcare — Health Checkup Management System</h4>
-          <div class="stack">React · Node.js · MongoDB · Cloudflare R2 · 2026</div>
+          <div class="stack">React · Node.js · MongoDB Atlas · Cloudflare R2 · 2026</div>
           <ul>
             <li>JWT auth, atomic ID generation, rate limiting, audit logging, auto-save with debounce, analytics aggregation, and role-based UI rendering.</li>
             <li>Bulk Excel import via SheetJS, ZIP download of records, and automatic merged PDF generation across 24 configurable medical forms.</li>
@@ -1031,7 +1040,7 @@
       </div>
       <div class="win-content">
         <h3 class="wt">Ganpat University, Gujarat</h3>
-        <p>B.Tech — Computer Science Engineering<br>Expected May 2027 · 7th Semester</p>
+        <p>B.Tech — Computer Science Engineering<br>Expected 2027 (7th Semester)</p>
       </div>
     </div>
 
@@ -1401,13 +1410,13 @@
   const QA = {
     built: {
       q:"What have you built?",
-      a:"Mostly real things for real clients. A health-checkup management system for a medical center, a B2B wholesale portal for a gold dealer network, a multilingual WhatsApp-integrated inquiry site, and ongoing strategy work for a venue marketplace startup.",
+      a:"Mostly real things for real clients. A health-checkup management system for a medical center (Aster Medcare), a B2B wholesale jewellery portal (Yash Ornaments), a rebuilt fast static site with WhatsApp deep-link purchasing for a food products brand, and venue marketplace strategy (Venme.in).",
       next:["aster","yash"]
     },
     aster: {
       q:"Tell me about Aster Medcare",
-      a:"A health checkup management system for a medical center. MERN stack, role-based access control, JWT auth, and 24+ dynamic medical forms — including a pixel-exact digital version of a government compliance form. Bulk Excel import via SheetJS, and automatic merged PDF generation.",
-      stat:"<b>500+</b> daily checkups · <b>15</b> staff users · <b>24</b> dynamic forms",
+      a:"A health checkup management system for a medical center. Built with React/Vite, Node/Express, and MongoDB. Handles 500+ daily checkups. Shipped features like a custom PDF generation engine, CR-80 ID generator with QR, and a staged multi-sheet Excel bulk import. I also led a security audit, adding brute-force rate limiting and migrating plaintext government ID storage to AES-256-GCM encryption.",
+      stat:"<b>500+</b> daily checkups · <b>15+</b> staff users · <b>24</b> dynamic forms",
       tags:["React","Node.js","MongoDB","Cloudflare R2"],
       next:["yash","stack"]
     },
@@ -1420,7 +1429,7 @@
     },
     stack: {
       q:"What's your tech stack?",
-      a:"Frontend: React, Angular, HTML/CSS, JavaScript (ES6+). Backend: Node.js, Express, MongoDB, JWT/RBAC. Cloud: Cloudflare R2, MongoDB Atlas, Vercel, Railway, Docker. AI: Gemini API, LLM prompt engineering, Python.",
+      a:"Frontend: React.js, Next.js, Angular, HTML5, CSS3, JavaScript (ES6+), Tailwind CSS, jQuery. Backend: Node.js, Express.js, REST APIs, Socket.io, MongoDB, Mongoose, JWT/RBAC. Cloud/DevOps: Vercel, Render, AWS Lightsail, Cloudflare R2, MongoDB Atlas, Docker, GitHub Actions. AI: Gemini API, Prompt Engineering, Python.",
       next:["ai","intern"]
     },
     ai: {
@@ -1435,7 +1444,7 @@
     },
     education: {
       q:"What's your education?",
-      a:"B.Tech, Computer Science Engineering at Ganpat University, Gujarat — expected May 2027, currently in 7th semester. Plus a handful of certifications: CCNA, Docker Essentials, Java Fundamentals, Python (DataCamp + Cisco), and Cisco's Modern AI track.",
+      a:"B.Tech, Computer Science Engineering at Ganpat University, Gujarat — expected 2027, currently in 7th semester. Plus a handful of certifications: CCNA, Docker Essentials, Java Fundamentals, Python (DataCamp + Cisco), and Cisco's Modern AI track.",
       next:["contact"]
     },
     contact: {
@@ -1450,12 +1459,12 @@
     },
     skills: {
       q:"What are your core skills?",
-      a:"Frontend: React.js, Angular, HTML5, CSS3, JavaScript (ES6+). Backend: Node.js, Express.js, REST APIs, MongoDB, JWT/RBAC. Cloud: Cloudflare R2, MongoDB Atlas, Vercel, Railway, Docker. AI: Gemini API, Prompt Engineering.",
+      a:"Frontend: React.js, Next.js, Angular, HTML5, CSS3, JavaScript (ES6+), Tailwind CSS. Backend: Node.js, Express.js, REST APIs, Socket.io, MongoDB, Mongoose, JWT/RBAC. Cloud: Cloudflare R2, MongoDB Atlas, Vercel, Render, AWS Lightsail, Docker, GitHub Actions. AI/Tools: Gemini API, Prompt Engineering, Python, pdf-lib, SheetJS, Recharts.",
       next:["built", "ai", "contact"]
     },
     experience: {
       q:"What is your work experience?",
-      a:"Harshil has worked as a freelance Full Stack Developer (2024-Present) shipping checkup tools (Aster Medcare) and retail jewelry portals (Yash Ornaments). He also consulted on digital transformation for Sarvamangal Enterprise, digitizing manual paperwork workflows.",
+      a:"Harshil has worked as a freelance Full Stack Developer (2024-Present), architecting Aster Medcare (health checkup management system) and Yash Ornaments (B2B wholesale jewellery portal). He also rebuilt legacy WordPress sites to Vercel static sites and worked as a Digital Transformation Consultant for Sarvamangal Enterprise.",
       next:["aster", "yash", "intern"]
     },
     projects: {
@@ -2225,18 +2234,19 @@
     });
   });
 
-  // ===== background color bends shader =====
-  function initColorBends() {
+  // ===== background line waves WebGL initialization =====
+  function initLineWaves() {
     const container = document.getElementById('desktop');
     if (!container) return;
 
     const canvas = document.createElement('canvas');
-    canvas.className = 'line-waves-canvas'; // Keep class for transition styles
+    canvas.className = 'line-waves-canvas';
     container.insertBefore(canvas, container.firstChild);
 
-    const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: true }) || 
-               canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: true });
+    const gl = canvas.getContext('webgl', { alpha: true, premultipliedAlpha: false }) || canvas.getContext('experimental-webgl', { alpha: true, premultipliedAlpha: false });
     if (!gl) return;
+
+    gl.clearColor(0, 0, 0, 0);
 
     const vsSource = `
       attribute vec2 position;
@@ -2249,105 +2259,111 @@
 
     const fsSource = `
       precision highp float;
-
-      #define MAX_COLORS 8
-      uniform vec2 uCanvas;
-      uniform float uTime;
-      uniform float uSpeed;
-      uniform vec2 uRot;
-      uniform int uColorCount;
-      uniform vec3 uColors[MAX_COLORS];
-      uniform int uTransparent;
-      uniform float uScale;
-      uniform float uFrequency;
-      uniform float uWarpStrength;
-      uniform vec2 uPointer; // in NDC [-1,1]
-      uniform float uMouseInfluence;
-      uniform float uParallax;
-      uniform float uNoise;
-      uniform int uIterations;
-      uniform float uIntensity;
-      uniform float uBandWidth;
       varying vec2 vUv;
 
+      uniform float uTime;
+      uniform vec3 uResolution;
+      uniform float uSpeed;
+      uniform float uInnerLines;
+      uniform float uOuterLines;
+      uniform float uWarpIntensity;
+      uniform float uRotation;
+      uniform float uEdgeFadeWidth;
+      uniform float uColorCycleSpeed;
+      uniform float uBrightness;
+      uniform vec3 uColor1;
+      uniform vec3 uColor2;
+      uniform vec3 uColor3;
+      uniform vec2 uMouse;
+      uniform float uMouseInfluence;
+      uniform bool uEnableMouse;
+
+      #define HALF_PI 1.5707963
+
+      float hashF(float n) {
+        return fract(sin(n * 127.1) * 43758.5453123);
+      }
+
+      float smoothNoise(float x) {
+        float i = floor(x);
+        float f = fract(x);
+        float u = f * f * (3.0 - 2.0 * f);
+        return mix(hashF(i), hashF(i + 1.0), u);
+      }
+
+      float displaceA(float coord, float t) {
+        float result = sin(coord * 2.123) * 0.2;
+        result += sin(coord * 3.234 + t * 4.345) * 0.1;
+        result += sin(coord * 0.589 + t * 0.934) * 0.5;
+        return result;
+      }
+
+      float displaceB(float coord, float t) {
+        float result = sin(coord * 1.345) * 0.3;
+        result += sin(coord * 2.734 + t * 3.345) * 0.2;
+        result += sin(coord * 0.189 + t * 0.934) * 0.3;
+        return result;
+      }
+
+      vec2 rotate2D(vec2 p, float angle) {
+        float c = cos(angle);
+        float s = sin(angle);
+        return vec2(p.x * c - p.y * s, p.x * s + p.y * c);
+      }
+
       void main() {
-        float t = uTime * uSpeed;
-        vec2 p = vUv * 2.0 - 1.0;
-        p += uPointer * uParallax * 0.1;
-        vec2 rp = vec2(p.x * uRot.x - p.y * uRot.y, p.x * uRot.y + p.y * uRot.x);
-        vec2 q = vec2(rp.x * (uCanvas.x / uCanvas.y), rp.y);
-        q /= max(uScale, 0.0001);
-        q /= 0.5 + 0.2 * dot(q, q);
-        q += 0.2 * cos(t) - 7.56;
-        vec2 toward = (uPointer - rp);
-        q += toward * uMouseInfluence * 0.2;
+        vec2 coords = gl_FragCoord.xy / uResolution.xy;
+        coords = coords * 2.0 - 1.0;
+        coords = rotate2D(coords, uRotation);
 
-        for (int j = 0; j < 5; j++) {
-          if (j >= uIterations - 1) break;
-          vec2 rr = sin(1.5 * (q.yx * uFrequency) + 2.0 * cos(q * uFrequency));
-          q += (rr - q) * 0.15;
+        float halfT = uTime * uSpeed * 0.5;
+        float fullT = uTime * uSpeed;
+
+        float mouseWarp = 0.0;
+        if (uEnableMouse) {
+          vec2 mPos = rotate2D(uMouse * 2.0 - 1.0, uRotation);
+          float mDist = length(coords - mPos);
+          mouseWarp = uMouseInfluence * exp(-mDist * mDist * 4.0);
         }
 
-        vec3 col = vec3(0.0);
-        float a = 1.0;
+        float warpAx = coords.x + displaceA(coords.y, halfT) * uWarpIntensity + mouseWarp;
+        float warpAy = coords.y - displaceA(coords.x * cos(fullT) * 1.235, halfT) * uWarpIntensity;
+        float warpBx = coords.x + displaceB(coords.y, halfT) * uWarpIntensity + mouseWarp;
+        float warpBy = coords.y - displaceB(coords.x * sin(fullT) * 1.235, halfT) * uWarpIntensity;
 
-        if (uColorCount > 0) {
-          vec2 s = q;
-          vec3 sumCol = vec3(0.0);
-          float cover = 0.0;
-          float fi = 0.0;
-          for (int i = 0; i < MAX_COLORS; ++i) {
-                if (i >= uColorCount) break;
-                s -= 0.01;
-                vec2 r = sin(1.5 * (s.yx * uFrequency) + 2.0 * cos(s * uFrequency));
-                float m0 = length(r + sin(5.0 * r.y * uFrequency - 3.0 * t + fi) / 4.0);
-                float kBelow = clamp(uWarpStrength, 0.0, 1.0);
-                float kMix = pow(kBelow, 0.3);
-                float gain = 1.0 + max(uWarpStrength - 1.0, 0.0);
-                vec2 disp = (r - s) * kBelow;
-                vec2 warped = s + disp * gain;
-                float m1 = length(warped + sin(5.0 * warped.y * uFrequency - 3.0 * t + fi) / 4.0);
-                float m = mix(m0, m1, kMix);
-                float w = 1.0 - exp(-uBandWidth / exp(uBandWidth * m));
-                sumCol += uColors[i] * w;
-                cover = max(cover, w);
-                fi += 1.0;
-          }
-          col = clamp(sumCol, 0.0, 1.0);
-          a = uTransparent > 0 ? cover : 1.0;
-        } else {
-            vec2 s = q;
-            float fk = 0.0;
-            for (int k = 0; k < 3; ++k) {
-                s -= 0.01;
-                vec2 r = sin(1.5 * (s.yx * uFrequency) + 2.0 * cos(s * uFrequency));
-                float m0 = length(r + sin(5.0 * r.y * uFrequency - 3.0 * t + fk) / 4.0);
-                float kBelow = clamp(uWarpStrength, 0.0, 1.0);
-                float kMix = pow(kBelow, 0.3);
-                float gain = 1.0 + max(uWarpStrength - 1.0, 0.0);
-                vec2 disp = (r - s) * kBelow;
-                vec2 warped = s + disp * gain;
-                float m1 = length(warped + sin(5.0 * warped.y * uFrequency - 3.0 * t + fk) / 4.0);
-                float m = mix(m0, m1, kMix);
-                float val = 1.0 - exp(-uBandWidth / exp(uBandWidth * m));
-                if (k == 0) col.r = val;
-                else if (k == 1) col.g = val;
-                else if (k == 2) col.b = val;
-                fk += 1.0;
-            }
-            a = uTransparent > 0 ? max(max(col.r, col.g), col.b) : 1.0;
+        vec2 fieldA = vec2(warpAx, warpAy);
+        vec2 fieldB = vec2(warpBx, warpBy);
+        vec2 blended = mix(fieldA, fieldB, mix(fieldA, fieldB, 0.5));
+
+        float fadeTop = smoothstep(uEdgeFadeWidth, uEdgeFadeWidth + 0.4, blended.y);
+        float fadeBottom = smoothstep(-uEdgeFadeWidth, -(uEdgeFadeWidth + 0.4), blended.y);
+        float vMask = 1.0 - max(fadeTop, fadeBottom);
+
+        float tileCount = mix(uOuterLines, uInnerLines, vMask);
+        float scaledY = blended.y * tileCount;
+        float nY = smoothNoise(abs(scaledY));
+
+        float ridge = pow(
+          step(abs(nY - blended.x) * 2.0, HALF_PI) * cos(2.0 * (nY - blended.x)),
+          5.0
+        );
+
+        float lines = 0.0;
+        for (float i = 1.0; i < 3.0; i += 1.0) {
+          lines += pow(max(fract(scaledY), fract(-scaledY)), i * 2.0);
         }
 
-        col *= uIntensity;
+        float pattern = vMask * lines;
 
-        if (uNoise > 0.0001) {
-          float n = fract(sin(dot(gl_FragCoord.xy + vec2(uTime), vec2(12.9898, 78.233))) * 43758.5453123);
-          col += (n - 0.5) * uNoise;
-          col = clamp(col, 0.0, 1.0);
-        }
+        float cycleT = fullT * uColorCycleSpeed;
+        float rChannel = (pattern + lines * ridge) * (cos(blended.y + cycleT * 0.234) * 0.5 + 1.0);
+        float gChannel = (pattern + vMask * ridge) * (sin(blended.x + cycleT * 1.745) * 0.5 + 1.0);
+        float bChannel = (pattern + lines * ridge) * (cos(blended.x + cycleT * 0.534) * 0.5 + 1.0);
 
-        vec3 rgb = (uTransparent > 0) ? col * a : col;
-        gl_FragColor = vec4(rgb, a);
+        vec3 col = (rChannel * uColor1 + gChannel * uColor2 + bChannel * uColor3) * uBrightness;
+        float alpha = clamp(length(col), 0.0, 1.0);
+
+        gl_FragColor = vec4(col, alpha);
       }
     `;
 
@@ -2365,8 +2381,6 @@
 
     const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
     const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
-    if (!vs || !fs) return;
-
     const program = gl.createProgram();
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
@@ -2392,89 +2406,75 @@
 
     gl.useProgram(program);
 
-    // Uniform locations
-    const uCanvasLoc = gl.getUniformLocation(program, 'uCanvas');
     const uTimeLoc = gl.getUniformLocation(program, 'uTime');
+    const uResolutionLoc = gl.getUniformLocation(program, 'uResolution');
     const uSpeedLoc = gl.getUniformLocation(program, 'uSpeed');
-    const uRotLoc = gl.getUniformLocation(program, 'uRot');
-    const uColorCountLoc = gl.getUniformLocation(program, 'uColorCount');
-    const uColorsLoc = gl.getUniformLocation(program, 'uColors');
-    const uTransparentLoc = gl.getUniformLocation(program, 'uTransparent');
-    const uScaleLoc = gl.getUniformLocation(program, 'uScale');
-    const uFrequencyLoc = gl.getUniformLocation(program, 'uFrequency');
-    const uWarpStrengthLoc = gl.getUniformLocation(program, 'uWarpStrength');
-    const uPointerLoc = gl.getUniformLocation(program, 'uPointer');
+    const uInnerLinesLoc = gl.getUniformLocation(program, 'uInnerLines');
+    const uOuterLinesLoc = gl.getUniformLocation(program, 'uOuterLines');
+    const uWarpIntensityLoc = gl.getUniformLocation(program, 'uWarpIntensity');
+    const uRotationLoc = gl.getUniformLocation(program, 'uRotation');
+    const uEdgeFadeWidthLoc = gl.getUniformLocation(program, 'uEdgeFadeWidth');
+    const uColorCycleSpeedLoc = gl.getUniformLocation(program, 'uColorCycleSpeed');
+    const uBrightnessLoc = gl.getUniformLocation(program, 'uBrightness');
+    const uColor1Loc = gl.getUniformLocation(program, 'uColor1');
+    const uColor2Loc = gl.getUniformLocation(program, 'uColor2');
+    const uColor3Loc = gl.getUniformLocation(program, 'uColor3');
+    const uMouseLoc = gl.getUniformLocation(program, 'uMouse');
     const uMouseInfluenceLoc = gl.getUniformLocation(program, 'uMouseInfluence');
-    const uParallaxLoc = gl.getUniformLocation(program, 'uParallax');
-    const uNoiseLoc = gl.getUniformLocation(program, 'uNoise');
-    const uIterationsLoc = gl.getUniformLocation(program, 'uIterations');
-    const uIntensityLoc = gl.getUniformLocation(program, 'uIntensity');
-    const uBandWidthLoc = gl.getUniformLocation(program, 'uBandWidth');
+    const uEnableMouseLoc = gl.getUniformLocation(program, 'uEnableMouse');
 
     function hexToVec3(hex) {
-      const h = hex.replace('#', '').trim();
-      const v =
-        h.length === 3
-          ? [parseInt(h[0] + h[0], 16), parseInt(h[1] + h[1], 16), parseInt(h[2] + h[2], 16)]
-          : [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
-      return [v[0] / 255, v[1] / 255, v[2] / 255];
+      const h = hex.replace('#', '');
+      return [
+        parseInt(h.slice(0, 2), 16) / 255,
+        parseInt(h.slice(2, 4), 16) / 255,
+        parseInt(h.slice(4, 6), 16) / 255
+      ];
     }
 
-    // Set configuration values matching component defaults
-    const colors = ["#ff5c7a", "#8a5cff", "#00ffd1"];
-    const rotation = 90;
-    const speed = 0.2;
-    const scale = 1;
-    const frequency = 1;
-    const warpStrength = 1;
-    const mouseInfluence = 1;
-    const noise = 0.15;
-    const parallax = 0.5;
-    const iterations = 1;
-    const intensity = 1.5;
-    const bandWidth = 6;
-    const transparent = true;
-    const autoRotate = 0;
+    const speed = 0.3;
+    const innerLineCount = 32.0;
+    const outerLineCount = 36.0;
+    const warpIntensity = 1.0;
+    const rotationRad = (-45 * Math.PI) / 180;
+    const edgeFadeWidth = 0.0;
+    const colorCycleSpeed = 1.0;
+    const brightness = 0.2;
+    const color1 = hexToVec3('#ffffff');
+    const color2 = hexToVec3('#ffffff');
+    const color3 = hexToVec3('#ffffff');
+    const mouseInfluence = 2.0;
+    const enableMouseInteraction = true;
 
     gl.uniform1f(uSpeedLoc, speed);
-    gl.uniform1i(uTransparentLoc, transparent ? 1 : 0);
-    gl.uniform1f(uScaleLoc, scale);
-    gl.uniform1f(uFrequencyLoc, frequency);
-    gl.uniform1f(uWarpStrengthLoc, warpStrength);
+    gl.uniform1f(uInnerLinesLoc, innerLineCount);
+    gl.uniform1f(uOuterLinesLoc, outerLineCount);
+    gl.uniform1f(uWarpIntensityLoc, warpIntensity);
+    gl.uniform1f(uRotationLoc, rotationRad);
+    gl.uniform1f(uEdgeFadeWidthLoc, edgeFadeWidth);
+    gl.uniform1f(uColorCycleSpeedLoc, colorCycleSpeed);
+    gl.uniform1f(uBrightnessLoc, brightness);
+    gl.uniform3fv(uColor1Loc, color1);
+    gl.uniform3fv(uColor2Loc, color2);
+    gl.uniform3fv(uColor3Loc, color3);
     gl.uniform1f(uMouseInfluenceLoc, mouseInfluence);
-    gl.uniform1f(uParallaxLoc, parallax);
-    gl.uniform1f(uNoiseLoc, noise);
-    gl.uniform1i(uIterationsLoc, iterations);
-    gl.uniform1f(uIntensityLoc, intensity);
-    gl.uniform1f(uBandWidthLoc, bandWidth);
+    gl.uniform1i(uEnableMouseLoc, enableMouseInteraction ? 1 : 0);
 
-    // Set colors array
-    const flatColors = new Float32Array(MAX_COLORS * 3);
-    for (let i = 0; i < MAX_COLORS; i++) {
-      if (i < colors.length) {
-        const rgb = hexToVec3(colors[i]);
-        flatColors[i * 3 + 0] = rgb[0];
-        flatColors[i * 3 + 1] = rgb[1];
-        flatColors[i * 3 + 2] = rgb[2];
-      } else {
-        flatColors[i * 3 + 0] = 0;
-        flatColors[i * 3 + 1] = 0;
-        flatColors[i * 3 + 2] = 0;
-      }
+    let currentMouse = [0.5, 0.5];
+    let targetMouse = [0.5, 0.5];
+
+    if (enableMouseInteraction) {
+      window.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        targetMouse = [
+          (e.clientX - rect.left) / rect.width,
+          1.0 - (e.clientY - rect.top) / rect.height
+        ];
+      });
+      window.addEventListener('mouseleave', () => {
+        targetMouse = [0.5, 0.5];
+      });
     }
-    gl.uniform3fv(uColorsLoc, flatColors);
-    gl.uniform1i(uColorCountLoc, colors.length);
-
-    let currentMouse = [0.0, 0.0];
-    let targetMouse = [0.0, 0.0];
-
-    window.addEventListener('mousemove', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      targetMouse = [
-        ((e.clientX - rect.left) / rect.width) * 2 - 1,
-        -(((e.clientY - rect.top) / rect.height) * 2 - 1)
-      ];
-    });
 
     function resize() {
       const width = container.clientWidth;
@@ -2488,50 +2488,46 @@
     window.addEventListener('resize', resize);
     resize();
 
-    let animationFrameId;
+    let renderActive = !reduceMotion;
 
     function render(time) {
       if (reduceMotion) {
-        gl.clearColor(0.0, 0.0, 0.0, 0.0);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        animationFrameId = requestAnimationFrame(render);
+        if (renderActive) {
+          gl.clearColor(0, 0, 0, 0);
+          gl.clear(gl.COLOR_BUFFER_BIT);
+          renderActive = false;
+        }
+        requestAnimationFrame(render);
         return;
       }
-
+      renderActive = true;
       resize();
 
       gl.uniform1f(uTimeLoc, time * 0.001);
-      gl.uniform2f(uCanvasLoc, canvas.width, canvas.height);
+      gl.uniform3f(uResolutionLoc, canvas.width, canvas.height, canvas.width / canvas.height);
 
-      // Rotation calculation
-      const deg = (rotation % 360) + autoRotate * (time * 0.001);
-      const rad = (deg * Math.PI) / 180;
-      const c = Math.cos(rad);
-      const s = Math.sin(rad);
-      gl.uniform2f(uRotLoc, c, s);
-
-      // Pointer interpolation
-      currentMouse[0] += 0.05 * (targetMouse[0] - currentMouse[0]);
-      currentMouse[1] += 0.05 * (targetMouse[1] - currentMouse[1]);
-      gl.uniform2fv(uPointerLoc, currentMouse);
+      if (enableMouseInteraction) {
+        currentMouse[0] += 0.05 * (targetMouse[0] - currentMouse[0]);
+        currentMouse[1] += 0.05 * (targetMouse[1] - currentMouse[1]);
+        gl.uniform2fv(uMouseLoc, currentMouse);
+      } else {
+        gl.uniform2f(uMouseLoc, 0.5, 0.5);
+      }
 
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-      animationFrameId = requestAnimationFrame(render);
+      requestAnimationFrame(render);
     }
-
-    animationFrameId = requestAnimationFrame(render);
+    requestAnimationFrame(render);
   }
 
-  try {
-    initColorBends();
-  } catch (e) {
-    console.error("WebGL ColorBends initialization failed:", e);
-  }
+  // Initialize WebGL background
+  initLineWaves();
 
   // Trigger Onboarding Tour automatically on load
   setTimeout(() => {
     startTour();
-  }, reduceMotion ? 100 : 1500);</script>
+  }, reduceMotion ? 100 : 1500);
+</script>
 
 </body>
 </html>

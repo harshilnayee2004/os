@@ -408,6 +408,32 @@
   .music-widget {
     bottom: 84px;
     right: 20px;
+    background: #121212 !important; /* Spotify dark card */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 14px !important;
+    width: 240px !important;
+  }
+  body[data-theme="light"] .music-widget {
+    background: #121212 !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  }
+  .music-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #1db954 !important; /* Spotify Green */
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  body[data-theme="light"] .music-header {
+    color: #1db954 !important;
   }
   .music-body {
     display: flex;
@@ -415,77 +441,93 @@
     gap: 10px;
   }
   .music-album-art {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #FF3366, #FF9933, #00FFFF);
+    width: 48px;
+    height: 48px;
+    border-radius: 6px !important;
+    background: linear-gradient(135deg, #7b1fa2, #e040fb);
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
     position: relative;
     transition: box-shadow 0.3s ease;
-    flex-shrink: 0;
   }
   .music-album-art.playing {
     animation: albumPulse 1.8s infinite;
   }
   @keyframes albumPulse {
-    0% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.6); }
-    70% { box-shadow: 0 0 0 8px rgba(255, 51, 102, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(29, 185, 84, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0); }
   }
   .music-info {
-    flex-grow: 1;
-    overflow: hidden;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
   .music-title {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 700;
+    color: #ffffff !important;
     white-space: nowrap;
-    animation: marquee 8s linear infinite;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .music-artist {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.7);
-  }
-  body[data-theme="light"] .music-artist {
-    color: rgba(0, 0, 0, 0.7);
+    font-size: 11px;
+    color: #b3b3b3 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .music-progress-container {
     width: 100%;
-    height: 3px;
-    background: rgba(255, 255, 255, 0.15);
-    border-radius: 1.5px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
     overflow: hidden;
     margin-top: 4px;
   }
   body[data-theme="light"] .music-progress-container {
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.1);
   }
   .music-progress-bar {
     height: 100%;
     width: 0%;
-    background: #1db954;
-    border-radius: 1.5px;
+    background: #1db954; /* Spotify green */
+    border-radius: 2px;
+    transition: width 0.1s linear;
   }
   .music-controls {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
+    margin-top: 4px;
   }
   .music-btn {
-    color: inherit;
-    font-size: 13px;
-    transition: transform 0.15s ease;
+    color: #b3b3b3 !important;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s ease;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .music-btn:hover {
-    transform: scale(1.15);
+    color: #ffffff !important;
+    transform: scale(1.08);
   }
   .music-visualizer {
     display: flex;
     align-items: flex-end;
-    gap: 2px;
-    height: 12px;
+    gap: 2.5px;
+    height: 14px;
+    margin-left: auto;
   }
   .music-bar {
     width: 2px;
@@ -1752,14 +1794,14 @@
 
     <!-- ===== MUSIC WIDGET ===== -->
     <div class="music-widget drag-widget" id="music-widget">
-      <div class="widget-header" id="music-widget-header">
-        <span class="widget-title">🟢 Now Playing</span>
+      <div class="music-header" id="music-widget-header">
+        <span>🟢 Now Playing</span>
       </div>
       <div class="music-body">
-        <div class="music-album-art playing" id="music-album-art">🎨</div>
+        <div class="music-album-art playing" id="music-album-art">🐻</div>
         <div class="music-info">
-          <div class="music-title" id="music-title">Deep Focus</div>
-          <div class="music-artist" id="music-artist">Lo-Fi Coding Beats</div>
+          <div class="music-title" id="music-title">Stronger</div>
+          <div class="music-artist" id="music-artist">Kanye West</div>
           <div class="music-progress-container">
             <div class="music-progress-bar" id="music-progress-bar"></div>
           </div>
@@ -1773,8 +1815,12 @@
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
         <div class="music-controls">
-          <button class="music-btn" onclick="togglePlayMusic()" id="music-play-btn">⏸️</button>
-          <button class="music-btn" onclick="nextTrack()">⏭️</button>
+          <button class="music-btn" onclick="togglePlayMusic()" id="music-play-btn" aria-label="Play/Pause">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          </button>
+          <button class="music-btn" onclick="nextTrack()" aria-label="Next Track">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+          </button>
         </div>
       </div>
     </div>
@@ -3235,9 +3281,24 @@
 
   // ===== SPOTIFY NOW PLAYING WIDGET =====
   const tracksList = [
-    { title: "Deep Focus", artist: "Lo-Fi Coding Beats" },
-    { title: "Night Shift", artist: "Synthwave Sessions" },
-    { title: "Coffee & Compile", artist: "Acoustic Coffeehouse" }
+    { 
+      title: "Stronger", 
+      artist: "Kanye West", 
+      art: "linear-gradient(135deg, #7b1fa2, #e040fb, #3f51b5)", 
+      symbol: "🐻"
+    },
+    { 
+      title: "Power", 
+      artist: "Kanye West", 
+      art: "linear-gradient(135deg, #d50000, #ff1744, #880e4f)", 
+      symbol: "👑"
+    },
+    { 
+      title: "Flashing Lights", 
+      artist: "Kanye West", 
+      art: "linear-gradient(135deg, #0d47a1, #00b0ff, #aa00ff)", 
+      symbol: "⚡"
+    }
   ];
   let currentTrackIdx = 0;
   let isMusicPlaying = true;
@@ -3274,7 +3335,13 @@
   function togglePlayMusic() {
     isMusicPlaying = !isMusicPlaying;
     playSystemSound('click');
-    musicPlayBtn.textContent = isMusicPlaying ? '⏸️' : '▶️';
+    if (musicPlayBtn) {
+      if (isMusicPlaying) {
+        musicPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+      } else {
+        musicPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M8 5v14l11-7z"/></svg>`;
+      }
+    }
     musicBars.forEach(bar => {
       bar.classList.toggle('active', isMusicPlaying);
     });
@@ -3291,8 +3358,13 @@
   function nextTrack() {
     playSystemSound('click');
     currentTrackIdx = (currentTrackIdx + 1) % tracksList.length;
-    musicTitleEl.textContent = tracksList[currentTrackIdx].title;
-    musicArtistEl.textContent = tracksList[currentTrackIdx].artist;
+    const track = tracksList[currentTrackIdx];
+    musicTitleEl.textContent = track.title;
+    musicArtistEl.textContent = track.artist;
+    if (albumArtEl) {
+      albumArtEl.style.background = track.art;
+      albumArtEl.textContent = track.symbol;
+    }
     musicProgress = 0;
     if (musicProgressBar) musicProgressBar.style.width = '0%';
     if (!isMusicPlaying) {

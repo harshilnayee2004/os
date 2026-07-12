@@ -323,6 +323,7 @@
     flex-direction: column;
     gap: 8px;
     color: #fff;
+    touch-action: none;
     transition: transform 0.2s ease, width 0.3s ease, height 0.3s ease;
     cursor: move;
   }
@@ -1383,46 +1384,46 @@
     }
 
     .music-widget, .notes-widget {
-      position: fixed !important;
-      bottom: 80px !important;
-      top: auto !important;
-      width: calc(50% - 15px) !important;
-      max-width: 240px !important;
+      position: fixed;
+      bottom: 80px;
+      top: auto;
+      width: calc(50% - 15px);
+      max-width: 240px;
       z-index: 100 !important;
     }
     .music-widget {
-      right: 10px !important;
-      left: auto !important;
+      right: 10px;
+      left: auto;
     }
     .notes-widget {
-      left: 10px !important;
-      right: auto !important;
+      left: 10px;
+      right: auto;
     }
     .notes-widget.minimized {
-      width: 44px !important;
-      height: 44px !important;
-      border-radius: 50% !important;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
     }
   }
 
   @media (max-width: 480px) {
     .music-widget, .notes-widget {
-      width: calc(100% - 20px) !important;
-      left: 10px !important;
-      right: 10px !important;
+      width: calc(100% - 20px);
+      left: 10px;
+      right: 10px;
     }
     .music-widget {
-      bottom: 80px !important;
+      bottom: 80px;
     }
     .notes-widget {
-      bottom: 172px !important;
+      bottom: 172px;
     }
     .notes-widget.minimized {
-      width: 44px !important;
-      height: 44px !important;
-      bottom: 172px !important;
-      left: 10px !important;
-      right: auto !important;
+      width: 44px;
+      height: 44px;
+      bottom: 172px;
+      left: 10px;
+      right: auto;
     }
     .mb-right .mb-link {
       display: none !important;
@@ -3117,7 +3118,6 @@
     }
 
     header.addEventListener('pointerdown', (e) => {
-      if (window.innerWidth <= 768) return;
       if (e.target.closest('button') || e.target.closest('input') || e.target.closest('textarea')) return;
       
       dragging = true;
@@ -3127,6 +3127,12 @@
       const rect = el.getBoundingClientRect();
       originX = rect.left;
       originY = rect.top;
+
+      // Lock positions to prevent CSS layout conflicts during drag
+      el.style.left = originX + 'px';
+      el.style.top = originY + 'px';
+      el.style.bottom = 'auto';
+      el.style.right = 'auto';
 
       header.setPointerCapture(e.pointerId);
       playSystemSound('click');

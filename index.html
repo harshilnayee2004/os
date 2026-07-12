@@ -3163,12 +3163,9 @@
   }
   updateNotesWidgetState();
 
-  // ===== DRAGGABLE WIDGETS LOGIC =====
   function makeWidgetDraggable(el, storageKey) {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    let dragging = false, startX, startY, originX, originY;
     const header = document.getElementById(el.id + '-header') || el;
-    header.onmousedown = dragMouseDown;
-    header.ontouchstart = dragMouseDown;
 
     const savedPos = localStorage.getItem(storageKey);
     if (savedPos) {
@@ -3181,49 +3178,54 @@
       } catch(e) {}
     }
 
-    function dragMouseDown(e) {
+    header.addEventListener('pointerdown', (e) => {
       if (window.innerWidth <= 768) return;
-      e = e || window.event;
-      if (e.target.tagName !== 'BUTTON' && e.target.tagName !== 'INPUT') {
-        e.preventDefault();
-      }
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      pos3 = clientX;
-      pos4 = clientY;
-      document.onmouseup = closeDragElement;
-      document.ontouchend = closeDragElement;
-      document.onmousemove = elementDrag;
-      document.ontouchmove = elementDrag;
-      playSystemSound('click');
-    }
+      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('textarea')) return;
+      
+      dragging = true;
+      startX = e.clientX;
+      startY = e.clientY;
+      
+      const rect = el.getBoundingClientRect();
+      originX = rect.left;
+      originY = rect.top;
 
-    function elementDrag(e) {
-      e = e || window.event;
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      pos1 = pos3 - clientX;
-      pos2 = pos4 - clientY;
-      pos3 = clientX;
-      pos4 = clientY;
-      let newTop = el.offsetTop - pos2;
-      let newLeft = el.offsetLeft - pos1;
+      header.setPointerCapture(e.pointerId);
+      playSystemSound('click');
+    });
+
+    header.addEventListener('pointermove', (e) => {
+      if (!dragging) return;
+      
+      const dx = e.clientX - startX;
+      const dy = e.clientY - startY;
+      
+      let newLeft = originX + dx;
+      let newTop = originY + dy;
+      
       newTop = Math.max(50, Math.min(newTop, window.innerHeight - el.offsetHeight - 20));
       newLeft = Math.max(10, Math.min(newLeft, window.innerWidth - el.offsetWidth - 20));
-      el.style.top = newTop + "px";
+      
       el.style.left = newLeft + "px";
+      el.style.top = newTop + "px";
       el.style.bottom = "auto";
       el.style.right = "auto";
-    }
+    });
 
-    function closeDragElement() {
-      document.onmouseup = null;
-      document.ontouchend = null;
-      document.onmousemove = null;
-      document.ontouchmove = null;
+    header.addEventListener('pointerup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      header.releasePointerCapture(e.pointerId);
+      
       const coords = { left: el.style.left, top: el.style.top };
       localStorage.setItem(storageKey, JSON.stringify(coords));
-    }
+    });
+
+    header.addEventListener('pointercancel', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      header.releasePointerCapture(e.pointerId);
+    });
   }
 
   makeWidgetDraggable(document.getElementById('notes-widget'), 'notes_widget_pos');

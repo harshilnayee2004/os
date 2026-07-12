@@ -149,21 +149,21 @@
     z-index:300;
     display:flex; flex-wrap:nowrap; align-items:flex-end; gap:10px;
     padding:10px 14px 8px;
-    background:rgba(255,255,255,0.12);
-    border:1px solid rgba(255,255,255,0.15);
-    border-top:1px solid rgba(255,255,255,0.35);
-    backdrop-filter:blur(20px);
-    -webkit-backdrop-filter:blur(20px);
+    background: rgba(20, 15, 35, 0.55);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     border-radius:22px;
-    box-shadow:0 14px 34px rgba(0,0,0,0.3);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 0 0 40px rgba(147, 51, 234, 0.15);
   }
   .dock-icon{
     position:relative;
     width:52px; height:52px;
     border-radius:14px;
     display:flex; align-items:center; justify-content:center;
-    transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, filter 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, filter 0.3s ease, opacity 0.3s ease;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3), inset 0 -2px 4px rgba(0,0,0,0.2);
     border: 1px solid rgba(255,255,255,0.15);
     overflow: hidden;
   }
@@ -177,31 +177,48 @@
     pointer-events: none;
     z-index: 2;
   }
-  .dock-icon[data-win="about"] { background: linear-gradient(135deg, #ff7e5f, #ff6a5f, #e85a4f); }
-  .dock-icon[data-win="skills"] { background: linear-gradient(135deg, #52B1E4, #4292D6, #3273C8); }
-  .dock-icon[data-win="experience"] { background: linear-gradient(135deg, #24c6cb, #118AB2, #06b690); }
-  .dock-icon[data-win="projects"] { background: linear-gradient(135deg, #3D4357, #2D3142, #1D202B); }
-  .dock-icon[data-win="ai"] { background: linear-gradient(135deg, #9A3DE2, #7300E0, #4A00B0); }
-  .dock-icon[data-win="education"] { background: linear-gradient(135deg, #26d0b5, #11998e, #18b85c); }
-  .dock-icon[data-win="certifications"] { background: linear-gradient(135deg, #fba02c, #f78c1e, #d96500); }
-  .dock-icon[data-win="contact"] { background: linear-gradient(135deg, #FF5E62, #FF416C, #D4145A); }
+  .dock-icon[data-win="about"] { background: linear-gradient(135deg, #e27a66, #c95e4b, #a84534); }
+  .dock-icon[data-win="skills"] { background: linear-gradient(135deg, #539ec4, #3c7cb5, #265994); }
+  .dock-icon[data-win="experience"] { background: linear-gradient(135deg, #3ca8ad, #1b7a99, #0c705c); }
+  .dock-icon[data-win="projects"] { background: linear-gradient(135deg, #363b4c, #262a38, #161821); }
+  .dock-icon[data-win="ai"] { background: linear-gradient(135deg, #8544bf, #5e1ca6, #3d1073); }
+  .dock-icon[data-win="education"] { background: linear-gradient(135deg, #37ad9a, #1b8279, #147a43); }
+  .dock-icon[data-win="certifications"] { background: linear-gradient(135deg, #db9035, #bd6f1e, #9e4a02); }
+  .dock-icon[data-win="contact"] { background: linear-gradient(135deg, #db585c, #c43356, #9c143d); }
 
-  .dock-icon:hover{ 
-    transform: translateY(-8px) scale(1.08); 
-    box-shadow: 0 12px 24px rgba(0,0,0,0.35), 0 0 12px rgba(255,255,255,0.15); 
-    filter: brightness(1.08); 
+  /* macOS ripple styles driven by JS */
+  .dock-icon.dock-hover-self {
+    transform: translateY(-4px) scale(1.1);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.4), inset 0 -2px 4px rgba(0,0,0,0.25), 0 0 8px rgba(255,255,255,0.1);
+    filter: brightness(1.05);
+    z-index: 10;
   }
-  .dock-icon:active{ transform: translateY(-4px) scale(1.02); }
+  .dock-icon.dock-hover-neighbor {
+    transform: translateY(-2px) scale(1.02);
+    opacity: 0.95;
+    z-index: 5;
+  }
+  .dock-icon.dock-hover-far {
+    transform: translateY(0) scale(0.92);
+    opacity: 0.7;
+  }
+  .dock-icon:active{ transform: translateY(-2px) scale(1.02); }
   .dock-svg{
-    width:22px; height:22px;
+    width:20px; height:20px;
     color:#ffffff;
-    stroke-width: 2px;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 1;
   }
+  .dock-svg path,
+  .dock-svg circle,
+  .dock-svg rect,
+  .dock-svg polyline,
+  .dock-svg line {
+    stroke-width: 1.8px !important;
+  }
   .dock-icon:hover .dock-svg{
-    transform: scale(1.1);
+    transform: scale(1.05);
   }
   .dock-label{
     position:absolute; bottom:64px; left:50%; transform:translateX(-50%);
@@ -211,15 +228,21 @@
     white-space:nowrap;
     opacity:0; pointer-events:none;
     transition:opacity 0.15s ease;
+    z-index: 100;
   }
   .dock-icon:hover .dock-label{ opacity:1; }
   .run-dot{
     position:absolute; bottom:-7px; left:50%; transform:translateX(-50%);
-    width:5px; height:5px; border-radius:50%;
-    background:#fff; opacity:0;
-    transition:opacity 0.2s ease;
+    width:4px; height:4px; border-radius:50%;
+    color:#fff;
+    background:currentColor;
+    opacity:0;
+    transition:opacity 0.2s ease, box-shadow 0.2s ease;
   }
-  .dock-icon.running .run-dot{ opacity:0.9; }
+  .dock-icon.running .run-dot{ 
+    opacity:0.95; 
+    box-shadow: 0 0 6px currentColor;
+  }
 
   /* ============ WINDOWS ============ */
   .win{
@@ -2237,6 +2260,27 @@
         win.classList.remove('maximized');
         closeWindow(win);
       }
+    });
+  });
+
+  // ===== dock icons macOS-style magnification ripple =====
+  const dockIconsList = document.querySelectorAll('.dock-icon');
+  dockIconsList.forEach((icon, idx) => {
+    icon.addEventListener('pointerenter', () => {
+      dockIconsList.forEach((other, oIdx) => {
+        if (oIdx === idx) {
+          other.classList.add('dock-hover-self');
+        } else if (oIdx === idx - 1 || oIdx === idx + 1) {
+          other.classList.add('dock-hover-neighbor');
+        } else {
+          other.classList.add('dock-hover-far');
+        }
+      });
+    });
+    icon.addEventListener('pointerleave', () => {
+      dockIconsList.forEach(other => {
+        other.classList.remove('dock-hover-self', 'dock-hover-neighbor', 'dock-hover-far');
+      });
     });
   });
 

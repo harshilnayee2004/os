@@ -149,40 +149,59 @@
     z-index:300;
     display:flex; flex-wrap:nowrap; align-items:flex-end; gap:10px;
     padding:10px 14px 8px;
-    background:rgba(255,255,255,0.14);
-    border:1px solid rgba(255,255,255,0.25);
-    backdrop-filter:blur(18px);
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.15);
+    border-top:1px solid rgba(255,255,255,0.35);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
     border-radius:22px;
-    box-shadow:0 14px 34px rgba(0,0,0,0.35);
+    box-shadow:0 14px 34px rgba(0,0,0,0.3);
   }
   .dock-icon{
     position:relative;
     width:52px; height:52px;
     border-radius:14px;
     display:flex; align-items:center; justify-content:center;
-    transition:transform 0.18s cubic-bezier(.3,1.4,.5,1), box-shadow 0.18s ease, filter 0.15s ease;
-    box-shadow:0 4px 10px rgba(0,0,0,0.2);
-    border: 1px solid rgba(255,255,255,0.12);
+    transition:transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, filter 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    border: 1px solid rgba(255,255,255,0.15);
+    overflow: hidden;
   }
-  .dock-icon[data-win="about"] { background: linear-gradient(135deg, #FF5E62, #FF9966); }
-  .dock-icon[data-win="skills"] { background: linear-gradient(135deg, #4EA8DE, #5390D9); }
-  .dock-icon[data-win="experience"] { background: linear-gradient(135deg, #118AB2, #06D6A0); }
-  .dock-icon[data-win="projects"] { background: linear-gradient(135deg, #2D3142, #4F5D75); }
-  .dock-icon[data-win="ai"] { background: linear-gradient(135deg, #8E2DE2, #4A00E0); }
-  .dock-icon[data-win="education"] { background: linear-gradient(135deg, #11998e, #38ef7d); }
-  .dock-icon[data-win="certifications"] { background: linear-gradient(135deg, #f7971e, #ffd200); }
-  .dock-icon[data-win="contact"] { background: linear-gradient(135deg, #FF416C, #FF4B2B); }
+  /* Glossy glass surface highlight */
+  .dock-icon::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 13px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0) 50%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .dock-icon[data-win="about"] { background: linear-gradient(135deg, #ff7e5f, #ff6a5f, #e85a4f); }
+  .dock-icon[data-win="skills"] { background: linear-gradient(135deg, #52B1E4, #4292D6, #3273C8); }
+  .dock-icon[data-win="experience"] { background: linear-gradient(135deg, #24c6cb, #118AB2, #06b690); }
+  .dock-icon[data-win="projects"] { background: linear-gradient(135deg, #3D4357, #2D3142, #1D202B); }
+  .dock-icon[data-win="ai"] { background: linear-gradient(135deg, #9A3DE2, #7300E0, #4A00B0); }
+  .dock-icon[data-win="education"] { background: linear-gradient(135deg, #26d0b5, #11998e, #18b85c); }
+  .dock-icon[data-win="certifications"] { background: linear-gradient(135deg, #fba02c, #f78c1e, #d96500); }
+  .dock-icon[data-win="contact"] { background: linear-gradient(135deg, #FF5E62, #FF416C, #D4145A); }
 
-  .dock-icon:hover{ transform:translateY(-10px) scale(1.12); box-shadow:0 14px 22px rgba(0,0,0,0.32); filter: brightness(1.08); }
-  .dock-icon:active{ transform:translateY(-4px) scale(1.04); }
+  .dock-icon:hover{ 
+    transform: translateY(-8px) scale(1.08); 
+    box-shadow: 0 12px 24px rgba(0,0,0,0.35), 0 0 12px rgba(255,255,255,0.15); 
+    filter: brightness(1.08); 
+  }
+  .dock-icon:active{ transform: translateY(-4px) scale(1.02); }
   .dock-svg{
     width:22px; height:22px;
     color:#ffffff;
+    stroke-width: 2px;
     filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
-    transition: transform 0.18s ease;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 1;
   }
   .dock-icon:hover .dock-svg{
-    transform: scale(1.15);
+    transform: scale(1.1);
   }
   .dock-label{
     position:absolute; bottom:64px; left:50%; transform:translateX(-50%);

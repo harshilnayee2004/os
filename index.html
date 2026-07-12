@@ -365,21 +365,9 @@
 
   /* Notes widget customisations */
   .notes-widget {
-    bottom: 180px;
-    right: 20px;
-  }
-  .note-preview-text {
-    font-size: 11px;
-    line-height: 1.4;
-    color: rgba(255, 255, 255, 0.85);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-  }
-  body[data-theme="light"] .note-preview-text {
-    color: rgba(0, 0, 0, 0.8);
+    bottom: 84px;
+    left: 20px;
+    right: auto;
   }
   .notes-widget.minimized {
     width: 44px;
@@ -391,7 +379,7 @@
     overflow: hidden;
   }
   .notes-widget.minimized .widget-header,
-  .notes-widget.minimized .note-preview-text {
+  .notes-widget.minimized #note-widget-textarea {
     display: none;
   }
   .notes-widget.minimized .widget-body {
@@ -1712,29 +1700,6 @@
       </div>
     </div>
 
-    <!-- ===== WINDOW: NOTES ===== -->
-    <div class="win" id="win-notes" data-id="notes">
-      <div class="win-titlebar">
-        <div class="win-btns">
-          <span class="win-btn close" data-action="close"></span>
-          <span class="win-btn min" data-action="min"></span>
-          <span class="win-btn max" data-action="max"></span>
-        </div>
-        <span class="win-title">notes.app</span>
-      </div>
-      <div class="win-body" style="padding: 0; display: flex; flex-direction: row; height: 100%;">
-        <div class="notes-sidebar" style="width: 140px; background: rgba(0,0,0,0.05); border-right: 1px solid rgba(255,255,255,0.1); padding: 10px; display: flex; flex-direction: column; gap: 8px;">
-          <div class="notes-sidebar-title" style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--ink-soft); letter-spacing: 0.05em;">My Notes</div>
-          <button class="notes-sidebar-item active" onclick="switchNote('learning')" style="text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; width: 100%;">📚 Learning</button>
-          <button class="notes-sidebar-item" onclick="switchNote('focus')" style="text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; width: 100%;">🎯 Focus 2026</button>
-          <button class="notes-sidebar-item" onclick="switchNote('scratchpad')" style="text-align: left; padding: 6px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; width: 100%;">📝 Scratchpad</button>
-        </div>
-        <div class="notes-editor" style="flex-grow: 1; padding: 14px; display: flex; flex-direction: column;">
-          <textarea id="notes-textarea" style="width: 100%; height: 100%; border: none; background: transparent; resize: none; color: var(--ink); font-family: inherit; font-size: 13px; line-height: 1.5; outline: none;"></textarea>
-        </div>
-      </div>
-    </div>
-
     <!-- ===== WINDOW: SETTINGS ===== -->
     <div class="win" id="win-settings" data-id="settings">
       <div class="win-titlebar">
@@ -1766,7 +1731,7 @@
 
     <!-- ===== CONTEXT MENU ===== -->
     <div id="desktop-context-menu" class="context-menu">
-      <div class="context-menu-item" onclick="openWindow(document.getElementById('win-notes'))">
+      <div class="context-menu-item" onclick="contextMenuNewNote()">
         <span>📝</span> New Note
       </div>
       <div class="context-menu-item" onclick="refreshDesktop()">
@@ -1784,11 +1749,11 @@
     <!-- ===== NOTES WIDGET ===== -->
     <div class="notes-widget drag-widget" id="notes-widget">
       <div class="widget-header" id="notes-widget-header">
-        <span class="widget-title">📝 Note Preview</span>
+        <span class="widget-title">📝 Desktop Sticky Note</span>
         <button class="widget-toggle" onclick="toggleNotesWidget(event)" id="notes-widget-toggle-btn">➖</button>
       </div>
       <div class="widget-body" onclick="notesWidgetClick()">
-        <div class="note-preview-text" id="note-widget-preview">Loading note preview...</div>
+        <textarea id="note-widget-textarea" style="width: 100%; height: 90px; border: none; background: transparent; resize: none; color: inherit; font-family: inherit; font-size: 11px; line-height: 1.4; outline: none; margin-top: 4px; padding: 0;" placeholder="Type a desktop note here..."></textarea>
       </div>
     </div>
 
@@ -1867,10 +1832,6 @@
       <button class="dock-icon" data-win="contact" aria-label="Open Contact">
         <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         <span class="dock-label">Contact</span><span class="run-dot"></span>
-      </button>
-      <button class="dock-icon" data-win="notes" aria-label="Open Notes">
-        <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
-        <span class="dock-label">Notes</span><span class="run-dot"></span>
       </button>
       <button class="dock-icon" data-win="settings" aria-label="Open Settings">
         <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
@@ -3082,57 +3043,29 @@
     }
   }
 
-  // ===== NOTES APP SWITCHER & EDITOR =====
-  const notesData = {
-    learning: `📚 **Things I'm Learning (2026)**\n\n1. **Advanced AI Integrations**: Exploring agentic workflows, function calling pipelines, and semantic vector indexing.\n2. **Rust Lang**: Learning memory safety semantics, lifetimes, and cargo systems.\n3. **Docker Essentials**: Containerizing backend services, configuring custom bridge networks.\n4. **CCNA & Modern Networks**: Cisco routing configurations, subnets, and security ACL controls.`,
-    focus: `🎯 **Focus & Strategy (2026)**\n\n- Master serverless deployment workflows.\n- Contribute regularly to open-source full-stack tools.\n- Automate workflow pipelines for freelance clients to save 10+ hours per week.`,
-    scratchpad: `📝 **Quick Scratchpad**\n\nWrite whatever you want here! It autosaves dynamically to your local storage.`
-  };
-
-  let currentNoteId = 'learning';
-  const textarea = document.getElementById('notes-textarea');
-
-  function updateNotesWidgetPreview() {
-    const previewEl = document.getElementById('note-widget-preview');
-    if (previewEl) {
-      const lines = notesData.scratchpad.split('\n');
-      const firstTwoLines = lines.slice(0, 2).join('<br>');
-      previewEl.innerHTML = firstTwoLines || 'Empty Scratchpad...';
+  // ===== DESKTOP NOTES STICKY WIDGET =====
+  const stickyTextarea = document.getElementById('note-widget-textarea');
+  function loadStickyNote() {
+    if (stickyTextarea) {
+      const defaultContent = `📚 Things I'm Learning (2026):\n1. Advanced AI Integrations\n2. Rust Memory Safety\n3. Docker Containerization\n4. CCNA Networks`;
+      stickyTextarea.value = localStorage.getItem('desktop_sticky_note') || defaultContent;
+      
+      stickyTextarea.addEventListener('input', () => {
+        localStorage.setItem('desktop_sticky_note', stickyTextarea.value);
+      });
     }
   }
+  loadStickyNote();
 
-  function loadNotes() {
-    const savedNotes = localStorage.getItem('notes_data');
-    if (savedNotes) {
-      try {
-        const parsed = JSON.parse(savedNotes);
-        Object.assign(notesData, parsed);
-      } catch (e) {}
+  function contextMenuNewNote() {
+    notesWidgetMinimized = false;
+    localStorage.setItem('notes_widget_min', 'false');
+    updateNotesWidgetState();
+    if (stickyTextarea) {
+      stickyTextarea.focus();
+      stickyTextarea.select();
     }
-    switchNote('learning');
-    updateNotesWidgetPreview();
   }
-
-  function switchNote(id) {
-    currentNoteId = id;
-    textarea.value = notesData[id];
-    document.querySelectorAll('.notes-sidebar-item').forEach(btn => {
-      const clickAttr = btn.getAttribute('onclick');
-      if (clickAttr && clickAttr.includes(id)) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-  }
-
-  textarea.addEventListener('input', () => {
-    notesData[currentNoteId] = textarea.value;
-    localStorage.setItem('notes_data', JSON.stringify(notesData));
-    updateNotesWidgetPreview();
-  });
-
-  loadNotes();
 
   // ===== NOTES WIDGET ACTIONS =====
   let notesWidgetMinimized = localStorage.getItem('notes_widget_min') === 'true';
@@ -3159,8 +3092,12 @@
     playSystemSound('click');
   }
   function notesWidgetClick() {
-    openWindow('notes');
-    switchNote('scratchpad');
+    if (notesWidgetMinimized) {
+      notesWidgetMinimized = false;
+      localStorage.setItem('notes_widget_min', 'false');
+      updateNotesWidgetState();
+      playSystemSound('click');
+    }
   }
   updateNotesWidgetState();
 

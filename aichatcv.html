@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Ask Harshil — Full Stack Developer (MERN) · AI & GenAI Integration</title>
 <meta name="description" content="Harshil Nayee — ask about his work, stack, or availability.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -200,7 +200,24 @@
   }
 
   @media (max-width:600px){
+    .topbar{
+      padding:14px 16px;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .topbar-right{
+      gap:10px;
+      width:100%;
+      justify-content:space-between;
+    }
     .bubble{ max-width:88%; }
+    .summary-card .srow{
+      flex-direction:column;
+      gap:2px;
+    }
+    .summary-card .sval{ text-align:left; }
+    #askInput{ font-size:16px; }
+    .composer{ padding-bottom: max(18px, env(safe-area-inset-bottom, 0px)); }
   }
 
 </style>
@@ -303,7 +320,7 @@
     return text
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      .replace(/`/g, '<code>$1</code>');
+      .replace(/`(.*?)`/g, '<code>$1</code>');
   }
 
   const thread = document.getElementById('thread');

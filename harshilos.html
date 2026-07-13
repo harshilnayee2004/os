@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Harshil Nayee — Full Stack Developer (MERN) · AI & GenAI Integration</title>
 <meta name="description" content="Portfolio of Harshil Nayee — Full Stack Developer (MERN) specializing in AI & GenAI integration, based in Ahmedabad, Gujarat.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -375,6 +375,10 @@
     left: 20px;
     right: auto;
   }
+  .notes-widget.user-positioned {
+    bottom: auto !important;
+    right: auto !important;
+  }
   .notes-widget.minimized {
     width: 44px;
     height: 44px;
@@ -398,152 +402,273 @@
     margin: 0;
   }
 
-  /* Music widget customisations */
+  /* Music widget — Android-style media card */
   .music-widget {
     bottom: 84px;
     right: 20px;
-    background: #121212 !important; /* Spotify dark card */
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6) !important;
-    color: #ffffff !important;
-    border-radius: 12px !important;
-    padding: 14px !important;
-    width: 240px !important;
+    left: auto;
+    width: 320px !important;
+    padding: 0 !important;
+    background: #111 !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    border-radius: 28px !important;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.55) !important;
+    color: #fff !important;
+    overflow: hidden;
+    cursor: grab;
+    z-index: 120;
+    touch-action: none;
+    user-select: none;
+  }
+  .music-widget.is-dragging {
+    cursor: grabbing;
+    z-index: 400;
+    transition: none !important;
+    box-shadow: 0 28px 60px rgba(0,0,0,0.65) !important;
+  }
+  .music-widget.user-positioned {
+    bottom: auto !important;
+    right: auto !important;
   }
   body[data-theme="light"] .music-widget {
-    background: #121212 !important;
-    color: #ffffff !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #111 !important;
+    color: #fff !important;
   }
+
+  .music-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+  .music-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.35);
+    filter: blur(18px) saturate(1.25) brightness(0.7);
+    transition: opacity 0.35s ease;
+  }
+  .music-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0.62) 100%);
+  }
+
+  .music-inner {
+    position: relative;
+    z-index: 1;
+    padding: 16px 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
   .music-header {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 8px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    color: #1db954 !important; /* Spotify Green */
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
-  body[data-theme="light"] .music-header {
-    color: #1db954 !important;
-  }
-  .music-body {
-    display: flex;
-    align-items: center;
+    justify-content: space-between;
     gap: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.78) !important;
+    letter-spacing: 0;
+    text-transform: none;
+    margin-bottom: 0;
+    cursor: inherit;
   }
-  .music-album-art {
-    width: 48px;
-    height: 48px;
-    border-radius: 6px !important;
-    background: linear-gradient(135deg, #7b1fa2, #e040fb);
+  .music-source {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .music-source svg {
+    width: 14px;
+    height: 14px;
+    flex: none;
+  }
+  .music-output-pill {
+    border: 1px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .music-track-row {
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-    position: relative;
-    transition: box-shadow 0.3s ease;
-  }
-  .music-album-art.playing {
-    animation: albumPulse 1.8s infinite;
-  }
-  @keyframes albumPulse {
-    0% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.6); }
-    70% { box-shadow: 0 0 0 8px rgba(29, 185, 84, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(29, 185, 84, 0); }
-  }
-  .music-info {
-    flex: 1;
+    gap: 12px;
     min-width: 0;
+  }
+  .music-cover {
+    width: 64px;
+    height: 64px;
+    border-radius: 10px;
+    overflow: hidden;
+    flex: none;
+    background: #222;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+  }
+  .music-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.28s ease, transform 0.35s ease;
+  }
+  .music-cover.is-changing img,
+  .music-meta.is-changing {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  .music-meta {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+    transition: opacity 0.25s ease, transform 0.25s ease;
   }
   .music-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: #ffffff !important;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #fff !important;
+    line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .music-artist {
-    font-size: 11px;
-    color: #b3b3b3 !important;
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.75) !important;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .music-progress-container {
-    width: 100%;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
+
+  .music-wave-wrap {
+    position: relative;
+    height: 48px;
+    margin: 4px 0 0;
     overflow: hidden;
-    margin-top: 4px;
   }
-  body[data-theme="light"] .music-progress-container {
-    background: rgba(255, 255, 255, 0.1);
-  }
-  .music-progress-bar {
+  .music-wave-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
     height: 100%;
-    width: 0%;
-    background: #1db954; /* Spotify green */
-    border-radius: 2px;
-    transition: width 0.1s linear;
+    display: block;
+    pointer-events: none;
+    filter: blur(0.2px);
   }
+  .music-scrub {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 72%;
+    height: 22px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    touch-action: none;
+    z-index: 2;
+  }
+  .music-scrub-track {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    transform: translateY(-50%);
+    background: rgba(255,255,255,0.28);
+    border-radius: 2px;
+  }
+  .music-scrub-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0%;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.45);
+  }
+  .music-scrub-knob {
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background: #fff;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.12), 0 2px 10px rgba(0,0,0,0.4);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .music-scrub:hover .music-scrub-knob,
+  .music-scrub.is-seeking .music-scrub-knob {
+    transform: translate(-50%, -50%) scale(1.2);
+    box-shadow: 0 0 0 6px rgba(255,255,255,0.16), 0 2px 12px rgba(0,0,0,0.45);
+  }
+  .music-times {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: rgba(255,255,255,0.65);
+    margin-top: -4px;
+  }
+
   .music-controls {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-top: 4px;
+    justify-content: space-between;
+    gap: 8px;
+    margin-top: 2px;
+    padding: 0 4px 2px;
   }
   .music-btn {
-    color: #b3b3b3 !important;
+    color: rgba(255,255,255,0.9) !important;
     background: transparent;
     border: none;
     cursor: pointer;
-    transition: color 0.2s ease, transform 0.1s ease;
-    padding: 0;
+    transition: color 0.2s ease, transform 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+    padding: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+  }
+  .music-btn svg {
+    width: 22px;
+    height: 22px;
+  }
+  .music-btn.primary {
+    background: rgba(255,255,255,0.12);
+    width: 46px;
+    height: 46px;
+  }
+  .music-btn.primary svg {
+    width: 26px;
+    height: 26px;
   }
   .music-btn:hover {
-    color: #ffffff !important;
+    color: #fff !important;
     transform: scale(1.08);
   }
-  .music-visualizer {
-    display: flex;
-    align-items: flex-end;
-    gap: 2.5px;
-    height: 14px;
-    margin-left: auto;
+  .music-btn:active {
+    transform: scale(0.94);
   }
-  .music-bar {
-    width: 2px;
-    height: 2px;
-    background: #1db954;
-    border-radius: 1px;
-  }
-  .music-bar.active {
-    animation: bounceVisualizer 0.8s ease-in-out infinite alternate;
-  }
-  .music-bar:nth-child(2) { animation-delay: 0.15s; }
-  .music-bar:nth-child(3) { animation-delay: 0.3s; }
-  .music-bar:nth-child(4) { animation-delay: 0.45s; }
 
-  @keyframes bounceVisualizer {
-    0% { height: 2px; }
-    100% { height: 12px; }
-  }
-  @keyframes marquee {
-    0% { transform: translateX(0); }
-    50% { transform: translateX(-40%); }
-    100% { transform: translateX(0); }
+  body.reduce-motion .music-wave-canvas {
+    display: none;
   }
 
   /* ============ CONTEXT MENU ============ */
@@ -660,7 +785,7 @@
     border-bottom: 1px solid rgba(255, 0, 128, 0.3);
     color: #00ffff;
   }
-  body[data-theme="neon"] .win-body {
+  body[data-theme="neon"] .win-content {
     color: #ffffff;
   }
   body[data-theme="neon"] .dock {
@@ -879,25 +1004,14 @@
     .mobile-text { display: inline; }
     
     /* Prevent input auto-zoom on iOS screens */
-    #chat-input {
+    #chat-input,
+    #spotlight-input,
+    #note-widget-textarea {
       font-size: 16px !important;
     }
   }
 
   @media (max-width: 480px) {
-    .dock {
-      flex-wrap: nowrap !important;
-      gap: 4px;
-      padding: 5px 6px;
-      border-radius: 14px;
-      bottom: 8px;
-    }
-    .dock-icon {
-      width: clamp(28px, 8.5vw, 38px);
-      height: clamp(28px, 8.5vw, 38px);
-      font-size: clamp(14px, 4vw, 18px);
-      border-radius: 8px;
-    }
     .menubar { padding: 0 6px; }
     .mb-right { gap: 2px; }
   }
@@ -1329,66 +1443,172 @@
   .dropdown-item:hover .toggle-status {
     background: rgba(255, 255, 255, 0.25);
   }
+  .theme-btn-row {
+    display: flex;
+    gap: 10px;
+  }
+
   /* ============ MOBILE RESPONSIVENESS ============ */
   @media (max-width: 768px) {
+    html, body {
+      height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    .menubar {
+      height: calc(40px + env(safe-area-inset-top, 0px));
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-left: max(8px, env(safe-area-inset-left, 0px));
+      padding-right: max(8px, env(safe-area-inset-right, 0px));
+    }
+
+    .menubar-indicators {
+      display: none;
+    }
+
+    .mb-right #closeAllBtn {
+      display: none;
+    }
+
     .win, .win.maximized, .win.snapped-left, .win.snapped-right {
       position: fixed !important;
-      bottom: 0 !important;
+      bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
       left: 0 !important;
       top: auto !important;
       right: 0 !important;
       width: 100% !important;
-      height: 80% !important;
-      border-radius: 20px 20px 0 0 !important;
-      transform: translateY(100%) !important;
+      max-width: 100vw !important;
+      height: auto !important;
+      max-height: calc(100dvh - 48px - 68px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+      min-width: 0 !important;
+      min-height: 0 !important;
+      border-radius: 18px 18px 0 0 !important;
+      transform: translateY(110%) !important;
       transition: transform 0.35s cubic-bezier(0.1, 0.76, 0.55, 0.94) !important;
       box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3) !important;
       z-index: 1000 !important;
     }
-    .win-body {
-      padding-bottom: 24px !important;
+    /* Chat needs a tall fixed sheet for the thread + composer */
+    #win-ai.win {
+      height: calc(100dvh - 48px - 68px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) !important;
+      max-height: none !important;
     }
-    .chat-composer {
-      padding-bottom: 24px !important;
-    }
+    .win.is-open:not(.closing):not(.minimizing),
     .win.opening {
       transform: translateY(0) !important;
     }
-    .win.closing {
-      transform: translateY(100%) !important;
+    .win.closing,
+    .win.minimizing {
+      transform: translateY(110%) !important;
     }
-    .win[style*="display: flex"] {
-      transform: translateY(0) !important;
+
+    .win-content {
+      padding: 16px 16px 20px !important;
+      min-height: 0;
+      max-height: calc(100dvh - 48px - 68px - 44px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    }
+    .win-content[style*="padding:0"],
+    .win-content[style*="padding: 0"] {
+      padding: 0 !important;
+      max-height: none;
+      flex: 1;
+    }
+    .chat-composer {
+      padding-bottom: 14px !important;
+    }
+    .chat-bubble {
+      max-width: 92%;
+    }
+    .chat-summary-card .srow {
+      flex-direction: column;
+      gap: 2px;
+    }
+    .chat-summary-card .sval {
+      text-align: left;
     }
     
     .win-titlebar {
       cursor: default !important;
+      touch-action: manipulation;
+      height: 44px;
+      background: rgba(255,255,255,0.72) !important;
+      position: relative;
     }
-    
+    .win-titlebar::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 36px;
+      height: 4px;
+      border-radius: 4px;
+      background: rgba(0,0,0,0.18);
+    }
+    .win-btn {
+      width: 14px;
+      height: 14px;
+    }
     .win-btn.min, .win-btn.max {
       display: none !important;
     }
+    .win-title {
+      margin-right: 14px;
+    }
+
+    .mini-stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cert-row {
+      flex-direction: column;
+      gap: 2px;
+    }
+    .cert-row .cmeta {
+      white-space: normal;
+    }
+
+    .contact-links a {
+      word-break: break-word;
+    }
+
+    .theme-btn-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
     .dock {
-      width: 95% !important;
-      max-width: 480px !important;
-      padding: 6px 12px !important;
-      gap: 12px !important;
+      width: calc(100% - 20px) !important;
+      max-width: 520px !important;
+      padding: 8px 10px !important;
+      padding-bottom: max(8px, env(safe-area-inset-bottom, 0px)) !important;
+      gap: 8px !important;
       overflow-x: auto !important;
+      overflow-y: hidden !important;
       display: flex !important;
       flex-wrap: nowrap !important;
       justify-content: flex-start !important;
-      height: 60px !important;
-      bottom: 10px !important;
-      border-radius: 20px !important;
+      height: auto !important;
+      min-height: 56px;
+      bottom: max(8px, env(safe-area-inset-bottom, 0px)) !important;
+      border-radius: 18px !important;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
     }
     .dock-icon {
-      width: 36px !important;
-      height: 36px !important;
+      width: 40px !important;
+      height: 40px !important;
       flex-shrink: 0 !important;
     }
-    .dock-icon:hover {
+    .dock-icon:hover,
+    .dock-icon.dock-hover-self,
+    .dock-icon.dock-hover-neighbor,
+    .dock-icon.dock-hover-far {
       transform: none !important;
+      filter: none !important;
+      opacity: 1 !important;
     }
     .dock-label {
       display: none !important;
@@ -1396,51 +1616,99 @@
 
     .music-widget, .notes-widget {
       position: fixed;
-      bottom: 80px;
-      top: auto;
-      width: calc(50% - 15px);
-      max-width: 240px;
-      z-index: 100 !important;
+      z-index: 120;
     }
-    .music-widget {
+    .music-widget:not(.user-positioned) {
+      bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+      top: auto;
       right: 10px;
       left: auto;
+      width: min(340px, calc(100vw - 20px)) !important;
+      max-width: calc(100vw - 20px);
     }
-    .notes-widget {
+    .notes-widget:not(.user-positioned) {
+      top: calc(56px + env(safe-area-inset-top, 0px));
+      bottom: auto;
       left: 10px;
       right: auto;
+      width: min(200px, calc(100vw - 20px));
+      max-width: calc(100vw - 20px);
     }
-    .notes-widget.minimized {
+    .notes-widget.minimized:not(.user-positioned) {
       width: 44px;
       height: 44px;
       border-radius: 50%;
+      top: calc(56px + env(safe-area-inset-top, 0px));
+      left: 10px;
+    }
+
+    .notification-toast {
+      top: calc(48px + env(safe-area-inset-top, 0px));
+      left: 12px;
+      right: 12px;
+      width: auto;
+      max-width: none;
+      transform: translateY(-120%);
+      transition: transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 2500;
+      box-sizing: border-box;
+    }
+    .notification-toast.show {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+      right: 12px;
+      left: 12px;
+    }
+    body.has-window-open .notification-toast {
+      transform: translateY(-120%);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .tour-tooltip {
+      width: calc(100vw - 24px) !important;
+      max-width: 360px !important;
+    }
+
+    #spotlight-input {
+      font-size: 16px !important;
     }
   }
 
   @media (max-width: 480px) {
-    .music-widget, .notes-widget {
-      width: calc(100% - 20px);
+    .music-widget:not(.user-positioned) {
+      width: calc(100vw - 20px) !important;
       left: 10px;
       right: 10px;
+      bottom: calc(72px + env(safe-area-inset-bottom, 0px));
     }
-    .music-widget {
-      bottom: 80px;
-    }
-    .notes-widget {
-      bottom: 172px;
-    }
-    .notes-widget.minimized {
-      width: 44px;
-      height: 44px;
-      bottom: 172px;
+    .notes-widget:not(.user-positioned) {
+      width: min(200px, calc(100vw - 20px));
+      max-width: calc(100vw - 20px);
       left: 10px;
       right: auto;
+      top: calc(56px + env(safe-area-inset-top, 0px));
+      bottom: auto;
+    }
+    .notes-widget.minimized:not(.user-positioned) {
+      width: 44px;
+      height: 44px;
+      top: calc(56px + env(safe-area-inset-top, 0px));
+      left: 10px;
+      right: auto;
+      bottom: auto;
     }
     .mb-right .mb-link {
       display: none !important;
     }
     .mb-right #tourBtn {
-      display: inline-block !important;
+      display: inline-flex !important;
+    }
+    .win-content {
+      padding: 14px 14px 18px !important;
     }
   }
 
@@ -1722,10 +1990,10 @@
         </div>
         <span class="win-title">settings.app</span>
       </div>
-      <div class="win-body" style="padding: 18px; display: flex; flex-direction: column; gap: 18px;">
+      <div class="win-content" style="display: flex; flex-direction: column; gap: 18px;">
         <div class="settings-section">
           <div class="settings-section-title" style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ink-soft); letter-spacing: 0.05em; margin-bottom: 8px;">System Theme</div>
-          <div style="display: flex; gap: 10px;">
+          <div class="theme-btn-row">
             <button class="theme-btn active" onclick="setTheme('dark')" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); background: rgba(0,0,0,0.2); color: #fff; font-size: 12px; font-weight: 600; text-align: center;">Sonoma Dark</button>
             <button class="theme-btn" onclick="setTheme('light')" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(0,0,0,0.15); background: rgba(255,255,255,0.4); color: #111; font-size: 12px; font-weight: 600; text-align: center;">Sonoma Light</button>
             <button class="theme-btn" onclick="setTheme('neon')" style="flex: 1; padding: 10px; border-radius: 8px; border: 1px solid rgba(255, 0, 128, 0.4); background: rgba(15, 8, 28, 0.8); color: #00ffff; font-size: 12px; font-weight: 600; text-align: center; box-shadow: 0 0 10px rgba(255, 0, 128, 0.15);">Neon Synthwave</button>
@@ -1733,9 +2001,9 @@
         </div>
         <div class="settings-section">
           <div class="settings-section-title" style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--ink-soft); letter-spacing: 0.05em; margin-bottom: 8px;">Audio &amp; Sounds</div>
-          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.05); padding: 10px 14px; border-radius: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.05); padding: 10px 14px; border-radius: 8px; gap: 12px;">
             <span style="font-size: 12px; font-weight: 600; color: var(--ink);">System Click &amp; Open Sounds</span>
-            <button id="sound-toggle-btn" onclick="toggleSound()" style="padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; background: var(--accent); color: #fff;">ENABLED</button>
+            <button id="sound-toggle-btn" onclick="toggleSound()" style="padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 700; background: var(--accent); color: #fff; flex: none;">ENABLED</button>
           </div>
         </div>
       </div>
@@ -1753,7 +2021,7 @@
       <div class="context-menu-item" onclick="startTour()">
         <span>🚀</span> Restart Tour
       </div>
-      <div class="context-menu-item" onclick="openWindow(document.getElementById('win-about'))">
+      <div class="context-menu-item" onclick="openWindow('about-build')">
         <span>ℹ️</span> About This Build
       </div>
     </div>
@@ -1771,33 +2039,51 @@
 
     <!-- ===== MUSIC WIDGET ===== -->
     <div class="music-widget drag-widget" id="music-widget">
-      <div class="music-header" id="music-widget-header">
-        <span>🟢 Now Playing</span>
+      <div class="music-bg" id="music-bg">
+        <img id="music-bg-img" src="bully.jpg" alt="" />
       </div>
-        <div class="music-album-art playing" id="music-album-art" style="overflow: hidden; background: none;">
-          <img src="bully.jpg" alt="Bully" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;" />
+      <div class="music-inner" id="music-widget-header">
+        <div class="music-header">
+          <div class="music-source">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+            <span>This phone</span>
+          </div>
+          <span class="music-output-pill">Media output</span>
         </div>
-        <div class="music-info">
-          <div class="music-title" id="music-title">Stronger</div>
-          <div class="music-artist" id="music-artist">Kanye West</div>
-          <div class="music-progress-container">
-            <div class="music-progress-bar" id="music-progress-bar"></div>
+
+        <div class="music-track-row">
+          <div class="music-cover" id="music-cover">
+            <img id="music-cover-img" src="bully.jpg" alt="Album cover" />
+          </div>
+          <div class="music-meta" id="music-info">
+            <div class="music-title" id="music-title">ALL THE LOVE (feat. Andre Troutman)</div>
+            <div class="music-artist" id="music-artist">Kanye West, Ye, Andre Troutman</div>
           </div>
         </div>
-        <div class="music-visualizer">
-          <div class="music-bar active"></div>
-          <div class="music-bar active"></div>
-          <div class="music-bar active"></div>
-          <div class="music-bar active"></div>
+
+        <div class="music-wave-wrap">
+          <canvas class="music-wave-canvas" id="music-wave-canvas" width="600" height="72"></canvas>
+          <div class="music-scrub" id="music-scrub" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="music-scrub-track">
+              <div class="music-scrub-fill" id="music-scrub-fill"></div>
+            </div>
+            <div class="music-scrub-knob" id="music-scrub-knob"></div>
+          </div>
         </div>
-      </div>
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+        <div class="music-times">
+          <span id="music-time-current">0:00</span>
+          <span id="music-time-total">3:49</span>
+        </div>
+
         <div class="music-controls">
-          <button class="music-btn" onclick="togglePlayMusic()" id="music-play-btn" aria-label="Play/Pause">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+          <button class="music-btn" onclick="prevTrack()" aria-label="Previous Track">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+          </button>
+          <button class="music-btn primary" onclick="togglePlayMusic()" id="music-play-btn" aria-label="Play/Pause">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
           </button>
           <button class="music-btn" onclick="nextTrack()" aria-label="Next Track">
-            <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
           </button>
         </div>
       </div>
@@ -1878,6 +2164,8 @@
           </div>
         </div>
       </div>
+    </div>
+
     <!-- ===== SPOTLIGHT SEARCH ===== -->
     <div id="spotlight">
       <div class="spotlight-card">
@@ -2565,11 +2853,16 @@
     }
 
     if (targetEl && step.placement !== 'center') {
+      if (targetEl.classList && targetEl.classList.contains('dock-icon')) {
+        targetEl.scrollIntoView({ inline: 'center', block: 'nearest', behavior: reduceMotion ? 'auto' : 'smooth' });
+      }
       const rect = targetEl.getBoundingClientRect();
       updateSpotlight(rect);
       tourTooltip.style.display = 'block';
       setTimeout(() => {
         tourTooltip.classList.add('active');
+        // Recalculate after scroll settles
+        updateSpotlight(targetEl.getBoundingClientRect());
         positionTooltip(targetEl, step.placement);
       }, 50);
     } else {
@@ -2670,11 +2963,28 @@
       const step = tourSteps[currentTourStep];
       const targetEl = typeof step.target === 'function' ? step.target() : step.target;
       if (targetEl && step.placement !== 'center') {
+        if (targetEl.classList && targetEl.classList.contains('dock-icon')) {
+          targetEl.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
+        }
         const rect = targetEl.getBoundingClientRect();
         updateSpotlight(rect);
         positionTooltip(targetEl, step.placement);
       }
     }
+
+    // Re-layout open windows when crossing the mobile breakpoint
+    document.querySelectorAll('.win.is-open, .win[style*="display: flex"]').forEach(win => {
+      if (isMobile()) {
+        win.style.left = '';
+        win.style.top = '';
+        win.style.width = '';
+        win.style.height = '';
+        win.classList.remove('maximized', 'snapped-left', 'snapped-right');
+      } else if (!win.dataset.positioned || win.style.width === '') {
+        delete win.dataset.positioned;
+        positionWindow(win, win.dataset.id);
+      }
+    });
   });
 
   function getWin(id){ return document.getElementById('win-'+id); }
@@ -2707,14 +3017,36 @@
     openCount++;
   }
 
+  function updateWindowOpenState(){
+    const anyOpen = !!document.querySelector('.win.is-open');
+    document.body.classList.toggle('has-window-open', anyOpen);
+    if (anyOpen && toast) toast.classList.remove('show');
+  }
+
   function openWindow(id){
     playSystemSound('open');
     const el = getWin(id);
     if(!el) return;
+
+    // On phones, keep a single bottom sheet visible at a time
+    if (isMobile()) {
+      document.querySelectorAll('.win').forEach(w => {
+        if (w === el) return;
+        if (w.classList.contains('is-open') || w.style.display === 'flex') {
+          w.style.display = 'none';
+          w.classList.remove('is-open', 'opening', 'closing', 'minimizing');
+          setRunning(w.dataset.id, false);
+        }
+      });
+    }
+
     positionWindow(el, id);
     el.style.display = 'flex';
     el.classList.remove('closing','minimizing');
-    el.classList.add('opening');
+    // Force layout so mobile bottom-sheet can animate from off-screen
+    void el.offsetWidth;
+    el.classList.add('opening', 'is-open');
+    updateWindowOpenState();
     setTimeout(() => el.classList.remove('opening'), reduceMotion ? 0 : 320);
     delete el.dataset.minimized;
     bringToFront(el);
@@ -2725,21 +3057,29 @@
   }
 
   function closeWindow(el){
+    if(!el) return;
     playSystemSound('click');
     el.classList.add('closing');
+    el.classList.remove('is-open', 'opening');
+    updateWindowOpenState();
     setTimeout(() => {
       el.style.display = 'none';
       el.classList.remove('closing');
       setRunning(el.dataset.id, false);
-    }, reduceMotion ? 0 : 220);
+      updateWindowOpenState();
+    }, reduceMotion ? 0 : 320);
   }
 
   function minimizeWindow(el){
+    if(!el) return;
     playSystemSound('click');
     el.classList.add('minimizing');
+    el.classList.remove('is-open', 'opening');
+    updateWindowOpenState();
     setTimeout(() => {
       el.style.display = 'none';
       el.classList.remove('minimizing');
+      updateWindowOpenState();
     }, reduceMotion ? 0 : 300);
     el.dataset.minimized = 'true';
   }
@@ -2801,6 +3141,7 @@
 
     handle.addEventListener('pointerdown', (e) => {
       if(e.target.closest('.win-btn')) return;
+      if(isMobile()) return;
       dragging = true;
       bringToFront(win);
       
@@ -3093,6 +3434,24 @@
 
   // ===== NOTES WIDGET ACTIONS =====
   let notesWidgetMinimized = localStorage.getItem('notes_widget_min') === 'true';
+  // Keep notes collapsed by default on phones so the desktop stays usable
+  if (window.innerWidth <= 768) {
+    if (localStorage.getItem('notes_widget_min') === null) {
+      notesWidgetMinimized = true;
+    }
+    // Clear legacy off-screen coords from desktop sessions
+    try {
+      ['notes_widget_pos', 'music_widget_pos'].forEach((key) => {
+        const raw = localStorage.getItem(key);
+        if (!raw) return;
+        const pos = JSON.parse(raw);
+        const leftPx = parseFloat(pos.left);
+        if (Number.isNaN(leftPx) || leftPx > window.innerWidth - 48) {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch (e) {}
+  }
   function updateNotesWidgetState() {
     const widget = document.getElementById('notes-widget');
     const btn = document.getElementById('notes-widget-toggle-btn');
@@ -3125,25 +3484,111 @@
   }
   updateNotesWidgetState();
 
+  function clampWidgetToViewport(el, storageKey) {
+    if (!el) return;
+    const pad = 8;
+    const menubar = 48;
+    const dockReserve = isMobile() ? 78 : 20;
+    const maxW = Math.max(120, window.innerWidth - pad * 2);
+    const maxH = Math.max(80, window.innerHeight - menubar - dockReserve);
+
+    // Keep widget from being wider than the screen
+    if (el.classList.contains('music-widget')) {
+      el.style.maxWidth = maxW + 'px';
+    }
+
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+
+    let left = rect.left;
+    let top = rect.top;
+    let changed = false;
+
+    if (left + rect.width > window.innerWidth - pad) {
+      left = window.innerWidth - rect.width - pad;
+      changed = true;
+    }
+    if (left < pad) {
+      left = pad;
+      changed = true;
+    }
+    if (top + rect.height > window.innerHeight - dockReserve) {
+      top = window.innerHeight - rect.height - dockReserve;
+      changed = true;
+    }
+    if (top < menubar) {
+      top = menubar;
+      changed = true;
+    }
+
+    // If still mostly off-screen (e.g. stale desktop coords on a phone), reset
+    const mostlyOff =
+      rect.right < 40 ||
+      rect.left > window.innerWidth - 40 ||
+      rect.bottom < 40 ||
+      rect.top > window.innerHeight - 40;
+
+    if (mostlyOff || (isMobile() && el.classList.contains('user-positioned') && rect.width > window.innerWidth * 0.95 && left > 20)) {
+      el.classList.remove('user-positioned');
+      el.style.left = '';
+      el.style.top = '';
+      el.style.right = '';
+      el.style.bottom = '';
+      if (storageKey) localStorage.removeItem(storageKey);
+      return;
+    }
+
+    if (changed && el.classList.contains('user-positioned')) {
+      el.style.left = Math.round(left) + 'px';
+      el.style.top = Math.round(top) + 'px';
+      el.style.bottom = 'auto';
+      el.style.right = 'auto';
+      if (storageKey) {
+        localStorage.setItem(storageKey, JSON.stringify({ left: el.style.left, top: el.style.top }));
+      }
+    }
+  }
+
   function makeWidgetDraggable(el, storageKey) {
-    let dragging = false, startX, startY, originX, originY;
+    let dragging = false, startX, startY, originX, originY, moved = false;
     const header = document.getElementById(el.id + '-header') || el;
 
     const savedPos = localStorage.getItem(storageKey);
     if (savedPos) {
       try {
         const { left, top } = JSON.parse(savedPos);
-        el.style.left = left;
-        el.style.top = top;
-        el.style.bottom = 'auto';
-        el.style.right = 'auto';
-      } catch(e) {}
+        const leftPx = parseFloat(left);
+        const topPx = parseFloat(top);
+        // Drop stale positions that would land off-screen on this viewport
+        const plausible =
+          !Number.isNaN(leftPx) &&
+          !Number.isNaN(topPx) &&
+          leftPx > -40 &&
+          topPx > -40 &&
+          leftPx < window.innerWidth - 40 &&
+          topPx < window.innerHeight - 40;
+
+        if (plausible) {
+          el.style.left = left;
+          el.style.top = top;
+          el.style.bottom = 'auto';
+          el.style.right = 'auto';
+          el.classList.add('user-positioned');
+        } else {
+          localStorage.removeItem(storageKey);
+        }
+      } catch(e) {
+        localStorage.removeItem(storageKey);
+      }
     }
 
+    requestAnimationFrame(() => clampWidgetToViewport(el, storageKey));
+
     header.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('textarea')) return;
+      if (e.target.closest('button') || e.target.closest('input') || e.target.closest('textarea') || e.target.closest('.music-scrub')) return;
       
       dragging = true;
+      moved = false;
       startX = e.clientX;
       startY = e.clientY;
       
@@ -3151,14 +3596,13 @@
       originX = rect.left;
       originY = rect.top;
 
-      // Lock positions to prevent CSS layout conflicts during drag
       el.style.left = originX + 'px';
       el.style.top = originY + 'px';
       el.style.bottom = 'auto';
       el.style.right = 'auto';
+      el.classList.add('user-positioned', 'is-dragging');
 
       header.setPointerCapture(e.pointerId);
-      playSystemSound('click');
     });
 
     header.addEventListener('pointermove', (e) => {
@@ -3166,12 +3610,13 @@
       
       const dx = e.clientX - startX;
       const dy = e.clientY - startY;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) moved = true;
       
       let newLeft = originX + dx;
       let newTop = originY + dy;
       
-      newTop = Math.max(50, Math.min(newTop, window.innerHeight - el.offsetHeight - 20));
-      newLeft = Math.max(10, Math.min(newLeft, window.innerWidth - el.offsetWidth - 20));
+      newTop = Math.max(48, Math.min(newTop, window.innerHeight - el.offsetHeight - (isMobile() ? 78 : 12)));
+      newLeft = Math.max(8, Math.min(newLeft, window.innerWidth - el.offsetWidth - 8));
       
       el.style.left = newLeft + "px";
       el.style.top = newTop + "px";
@@ -3179,24 +3624,33 @@
       el.style.right = "auto";
     });
 
-    header.addEventListener('pointerup', (e) => {
+    const endDrag = (e) => {
       if (!dragging) return;
       dragging = false;
-      header.releasePointerCapture(e.pointerId);
+      el.classList.remove('is-dragging');
+      try { header.releasePointerCapture(e.pointerId); } catch (_) {}
       
-      const coords = { left: el.style.left, top: el.style.top };
-      localStorage.setItem(storageKey, JSON.stringify(coords));
-    });
+      if (moved) {
+        clampWidgetToViewport(el, storageKey);
+        const coords = { left: el.style.left, top: el.style.top };
+        localStorage.setItem(storageKey, JSON.stringify(coords));
+        playSystemSound('click');
+      }
+    };
 
-    header.addEventListener('pointercancel', (e) => {
-      if (!dragging) return;
-      dragging = false;
-      header.releasePointerCapture(e.pointerId);
-    });
+    header.addEventListener('pointerup', endDrag);
+    header.addEventListener('pointercancel', endDrag);
   }
 
-  makeWidgetDraggable(document.getElementById('notes-widget'), 'notes_widget_pos');
-  makeWidgetDraggable(document.getElementById('music-widget'), 'music_widget_pos');
+  const notesWidgetEl = document.getElementById('notes-widget');
+  const musicWidgetEl = document.getElementById('music-widget');
+  makeWidgetDraggable(notesWidgetEl, 'notes_widget_pos');
+  makeWidgetDraggable(musicWidgetEl, 'music_widget_pos');
+
+  window.addEventListener('resize', () => {
+    clampWidgetToViewport(notesWidgetEl, 'notes_widget_pos');
+    clampWidgetToViewport(musicWidgetEl, 'music_widget_pos');
+  });
 
   // ===== RIGHT-CLICK CONTEXT MENU =====
   const contextMenu = document.getElementById('desktop-context-menu');
@@ -3248,55 +3702,83 @@
     }, 150);
   }
 
-  // ===== SPOTIFY NOW PLAYING WIDGET =====
+  // ===== SPOTIFY / ANDROID-STYLE NOW PLAYING WIDGET =====
   const tracksList = [
-    { 
-      title: "ALL THE LOVE (feat. Andre Troutman)", 
-      artist: "Kanye West, Ye, Andre Troutman", 
-      art: "none",
-      img: "bully.jpg",
-      symbol: ""
-    },
-    { 
-      title: "Stronger", 
-      artist: "Kanye West", 
-      art: "linear-gradient(135deg, #7b1fa2, #e040fb, #3f51b5)", 
-      img: "",
-      symbol: "🐻"
-    },
-    { 
-      title: "Power", 
-      artist: "Kanye West", 
-      art: "linear-gradient(135deg, #d50000, #ff1744, #880e4f)", 
-      img: "",
-      symbol: "👑"
-    }
+    { title: "ALL THE LOVE (feat. Andre Troutman)", artist: "Kanye West, Ye, Andre Troutman", img: "bully.jpg", album: "Bully", duration: 229 },
+    { title: "Stronger", artist: "Kanye West", img: "graduation.jpg", album: "Graduation", duration: 311 },
+    { title: "Power", artist: "Kanye West", img: "mbdtf.jpg", album: "My Beautiful Dark Twisted Fantasy", duration: 292 },
+    { title: "Through the Wire", artist: "Kanye West", img: "college-dropout.jpg", album: "The College Dropout", duration: 221 },
+    { title: "Gold Digger", artist: "Kanye West", img: "late-registration.jpg", album: "Late Registration", duration: 207 },
+    { title: "Heartless", artist: "Kanye West", img: "808s.jpg", album: "808s & Heartbreak", duration: 211 },
+    { title: "Black Skinhead", artist: "Kanye West", img: "yeezus.jpg", album: "Yeezus", duration: 188 },
+    { title: "Ultralight Beam", artist: "Kanye West", img: "life-of-pablo.jpg", album: "The Life of Pablo", duration: 321 },
+    { title: "Hurricane", artist: "Kanye West, The Weeknd, Lil Baby", img: "donda.jpg", album: "Donda", duration: 243 },
+    { title: "Carnival", artist: "¥$, Kanye West, Ty Dolla $ign", img: "vultures.jpg", album: "Vultures 1", duration: 209 }
   ];
   let currentTrackIdx = 0;
   let isMusicPlaying = true;
+  let isTrackChanging = false;
+  let isSeeking = false;
   const musicTitleEl = document.getElementById('music-title');
   const musicArtistEl = document.getElementById('music-artist');
-  const musicBars = document.querySelectorAll('.music-bar');
+  const musicInfoEl = document.getElementById('music-info');
   const musicPlayBtn = document.getElementById('music-play-btn');
-  const albumArtEl = document.getElementById('music-album-art');
-  const musicProgressBar = document.getElementById('music-progress-bar');
+  const musicBgImg = document.getElementById('music-bg-img');
+  const musicCoverEl = document.getElementById('music-cover');
+  const musicCoverImg = document.getElementById('music-cover-img');
+  const musicScrub = document.getElementById('music-scrub');
+  const musicScrubFill = document.getElementById('music-scrub-fill');
+  const musicScrubKnob = document.getElementById('music-scrub-knob');
+  const musicTimeCurrent = document.getElementById('music-time-current');
+  const musicTimeTotal = document.getElementById('music-time-total');
+  const waveCanvas = document.getElementById('music-wave-canvas');
+  const waveCtx = waveCanvas ? waveCanvas.getContext('2d') : null;
   
   let musicProgress = 0;
   let musicProgressInterval = null;
+  let waveRaf = null;
+  let wavePhase = 0;
+  let waveAmp = 0.2;
+  let waveTargetAmp = 0.42;
+
+  function formatTime(sec) {
+    sec = Math.max(0, Math.floor(sec));
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return m + ':' + String(s).padStart(2, '0');
+  }
+
+  function currentTrack() {
+    return tracksList[currentTrackIdx];
+  }
+
+  function updateScrubUI() {
+    const pct = Math.max(0, Math.min(100, musicProgress));
+    if (musicScrubFill) musicScrubFill.style.width = pct + '%';
+    if (musicScrubKnob) musicScrubKnob.style.left = pct + '%';
+    if (musicScrub) musicScrub.setAttribute('aria-valuenow', Math.round(pct));
+    const track = currentTrack();
+    if (track && musicTimeCurrent) {
+      musicTimeCurrent.textContent = formatTime((pct / 100) * track.duration);
+    }
+    if (track && musicTimeTotal) {
+      musicTimeTotal.textContent = formatTime(track.duration);
+    }
+  }
 
   function startProgressBar() {
     if (musicProgressInterval) clearInterval(musicProgressInterval);
     musicProgressInterval = setInterval(() => {
-      if (isMusicPlaying) {
-        musicProgress += 0.5;
-        if (musicProgress >= 100) {
-          musicProgress = 0;
-          nextTrack();
-        }
-        if (musicProgressBar) {
-          musicProgressBar.style.width = musicProgress + '%';
-        }
+      if (!isMusicPlaying || isSeeking) return;
+      const track = currentTrack();
+      const step = track ? (100 / (track.duration * 10)) : 0.4;
+      musicProgress += step;
+      if (musicProgress >= 100) {
+        musicProgress = 0;
+        nextTrack();
+        return;
       }
+      updateScrubUI();
     }, 100);
   }
 
@@ -3304,21 +3786,165 @@
     if (musicProgressInterval) clearInterval(musicProgressInterval);
   }
 
+  function waveHeightAt(x, w, h, phase, amp) {
+    const nx = x / w;
+    // Organic layered sinusoids — soft liquid hills like Android media player
+    const n1 = Math.sin(nx * Math.PI * 2.2 + phase) * amp;
+    const n2 = Math.sin(nx * Math.PI * 4.6 - phase * 1.35) * amp * 0.55;
+    const n3 = Math.sin(nx * Math.PI * 1.15 + phase * 0.55) * amp * 0.38;
+    const n4 = Math.sin(nx * Math.PI * 7.1 + phase * 2.1) * amp * 0.16;
+    // Gentle envelope so edges settle and center breathes
+    const envelope = 0.55 + 0.45 * Math.sin(nx * Math.PI);
+    const breath = 1 + 0.08 * Math.sin(phase * 0.7);
+    return (n1 + n2 + n3 + n4) * envelope * breath;
+  }
+
+  function fillWaveRibbon(ctx, w, h, phase, amp, fromX, toX, colors, baseline) {
+    const step = Math.max(2, w / 140);
+    ctx.beginPath();
+    ctx.moveTo(fromX, baseline);
+    for (let x = fromX; x <= toX; x += step) {
+      const y = baseline - Math.max(0, waveHeightAt(x, w, h, phase, amp));
+      ctx.lineTo(x, y);
+    }
+    ctx.lineTo(toX, baseline);
+    ctx.closePath();
+    const grad = ctx.createLinearGradient(0, 0, 0, baseline);
+    colors.forEach(([stop, color]) => grad.addColorStop(stop, color));
+    ctx.fillStyle = grad;
+    ctx.fill();
+  }
+
+  function drawWave() {
+    if (!waveCtx || !waveCanvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = waveCanvas.clientWidth || 300;
+    const cssH = waveCanvas.clientHeight || 48;
+    if (waveCanvas.width !== Math.floor(cssW * dpr) || waveCanvas.height !== Math.floor(cssH * dpr)) {
+      waveCanvas.width = Math.floor(cssW * dpr);
+      waveCanvas.height = Math.floor(cssH * dpr);
+    }
+    const w = waveCanvas.width;
+    const h = waveCanvas.height;
+    waveCtx.clearRect(0, 0, w, h);
+
+    waveTargetAmp = isMusicPlaying ? (isSeeking ? 0.52 : 0.44) : 0.16;
+    waveAmp += (waveTargetAmp - waveAmp) * 0.08;
+    const amp = waveAmp * h * 0.85;
+    // Keep the scrubber line as the floor — waves only rise above it
+    const baseline = h * 0.72;
+    const progressX = (musicProgress / 100) * w;
+
+    // Clip everything to the area above the line
+    waveCtx.save();
+    waveCtx.beginPath();
+    waveCtx.rect(0, 0, w, baseline);
+    waveCtx.clip();
+
+    // Soft fog layer (full width)
+    fillWaveRibbon(waveCtx, w, h, wavePhase * 0.65, amp * 0.85, 0, w, [
+      [0, 'rgba(255,255,255,0.12)'],
+      [0.55, 'rgba(255,255,255,0.05)'],
+      [1, 'rgba(255,255,255,0)']
+    ], baseline);
+
+    // Mid liquid ribbon
+    fillWaveRibbon(waveCtx, w, h, wavePhase, amp, 0, w, [
+      [0, 'rgba(255,255,255,0.26)'],
+      [0.45, 'rgba(255,255,255,0.10)'],
+      [1, 'rgba(255,255,255,0)']
+    ], baseline);
+
+    // Brighter played region
+    if (progressX > 1) {
+      waveCtx.save();
+      waveCtx.beginPath();
+      waveCtx.rect(0, 0, progressX, baseline);
+      waveCtx.clip();
+      fillWaveRibbon(waveCtx, w, h, wavePhase, amp * 1.05, 0, progressX + 2, [
+        [0, 'rgba(255,255,255,0.58)'],
+        [0.4, 'rgba(255,255,255,0.22)'],
+        [1, 'rgba(255,255,255,0)']
+      ], baseline);
+      waveCtx.restore();
+
+      // Soft bloom around the playhead (above the line only)
+      const bloom = waveCtx.createRadialGradient(progressX, baseline, 0, progressX, baseline, h * 0.65);
+      bloom.addColorStop(0, 'rgba(255,255,255,0.28)');
+      bloom.addColorStop(0.45, 'rgba(255,255,255,0.08)');
+      bloom.addColorStop(1, 'rgba(255,255,255,0)');
+      waveCtx.fillStyle = bloom;
+      waveCtx.fillRect(progressX - h, 0, h * 2, baseline);
+    }
+
+    // Crisp crest line on the main wave
+    waveCtx.beginPath();
+    const step = Math.max(2, w / 140);
+    for (let x = 0; x <= w; x += step) {
+      const y = baseline - Math.max(0, waveHeightAt(x, w, h, wavePhase, amp));
+      if (x === 0) waveCtx.moveTo(x, y);
+      else waveCtx.lineTo(x, y);
+    }
+    waveCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+    waveCtx.lineWidth = Math.max(1, dpr);
+    waveCtx.stroke();
+    waveCtx.restore();
+
+    if (!reduceMotion) {
+      wavePhase += isMusicPlaying ? 0.055 : 0.012;
+      waveRaf = requestAnimationFrame(drawWave);
+    }
+  }
+
+  function startWave() {
+    if (reduceMotion || !waveCtx) return;
+    if (waveRaf) cancelAnimationFrame(waveRaf);
+    drawWave();
+  }
+
+  function setTrackArt(src, alt) {
+    if (musicBgImg) {
+      musicBgImg.src = src;
+      musicBgImg.alt = '';
+    }
+    if (musicCoverImg) {
+      musicCoverImg.src = src;
+      musicCoverImg.alt = alt || 'Album cover';
+    }
+  }
+
+  function renderTrack(track, animate) {
+    if (!track) return;
+    const apply = () => {
+      if (musicTitleEl) musicTitleEl.textContent = track.title;
+      if (musicArtistEl) musicArtistEl.textContent = track.artist;
+      setTrackArt(track.img, track.album + ' album cover');
+      if (musicInfoEl) musicInfoEl.classList.remove('is-changing');
+      if (musicCoverEl) musicCoverEl.classList.remove('is-changing');
+      updateScrubUI();
+      isTrackChanging = false;
+    };
+
+    if (!animate || reduceMotion) {
+      apply();
+      return;
+    }
+
+    isTrackChanging = true;
+    if (musicInfoEl) musicInfoEl.classList.add('is-changing');
+    if (musicCoverEl) musicCoverEl.classList.add('is-changing');
+    setTimeout(apply, 220);
+  }
+
   function togglePlayMusic() {
     isMusicPlaying = !isMusicPlaying;
     playSystemSound('click');
     if (musicPlayBtn) {
       if (isMusicPlaying) {
-        musicPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
+        musicPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`;
       } else {
-        musicPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;"><path d="M8 5v14l11-7z"/></svg>`;
+        musicPlayBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`;
       }
-    }
-    musicBars.forEach(bar => {
-      bar.classList.toggle('active', isMusicPlaying);
-    });
-    if (albumArtEl) {
-      albumArtEl.classList.toggle('playing', isMusicPlaying);
     }
     if (isMusicPlaying) {
       startProgressBar();
@@ -3328,28 +3954,65 @@
   }
 
   function nextTrack() {
+    if (isTrackChanging) return;
     playSystemSound('click');
     currentTrackIdx = (currentTrackIdx + 1) % tracksList.length;
-    const track = tracksList[currentTrackIdx];
-    musicTitleEl.textContent = track.title;
-    musicArtistEl.textContent = track.artist;
-    if (albumArtEl) {
-      if (track.img) {
-        albumArtEl.style.background = 'none';
-        albumArtEl.innerHTML = `<img src="${track.img}" alt="Album Art" style="width:100%; height:100%; object-fit:cover; border-radius:inherit;" />`;
-      } else {
-        albumArtEl.style.background = track.art;
-        albumArtEl.innerHTML = track.symbol;
-      }
-    }
     musicProgress = 0;
-    if (musicProgressBar) musicProgressBar.style.width = '0%';
-    if (!isMusicPlaying) {
-      togglePlayMusic();
-    }
+    renderTrack(currentTrack(), true);
+    if (!isMusicPlaying) togglePlayMusic();
   }
 
+  function prevTrack() {
+    if (isTrackChanging) return;
+    playSystemSound('click');
+    if (musicProgress > 8) {
+      musicProgress = 0;
+      updateScrubUI();
+      return;
+    }
+    currentTrackIdx = (currentTrackIdx - 1 + tracksList.length) % tracksList.length;
+    musicProgress = 0;
+    renderTrack(currentTrack(), true);
+    if (!isMusicPlaying) togglePlayMusic();
+  }
+
+  function seekFromEvent(e) {
+    if (!musicScrub) return;
+    const rect = musicScrub.getBoundingClientRect();
+    const x = (e.clientX !== undefined ? e.clientX : e.touches[0].clientX) - rect.left;
+    musicProgress = Math.max(0, Math.min(100, (x / rect.width) * 100));
+    updateScrubUI();
+  }
+
+  if (musicScrub) {
+    musicScrub.addEventListener('pointerdown', (e) => {
+      e.stopPropagation();
+      isSeeking = true;
+      musicScrub.classList.add('is-seeking');
+      musicScrub.setPointerCapture(e.pointerId);
+      seekFromEvent(e);
+    });
+    musicScrub.addEventListener('pointermove', (e) => {
+      if (!isSeeking) return;
+      seekFromEvent(e);
+    });
+    const endSeek = (e) => {
+      if (!isSeeking) return;
+      isSeeking = false;
+      musicScrub.classList.remove('is-seeking');
+      try { musicScrub.releasePointerCapture(e.pointerId); } catch (_) {}
+    };
+    musicScrub.addEventListener('pointerup', endSeek);
+    musicScrub.addEventListener('pointercancel', endSeek);
+  }
+
+  renderTrack(tracksList[0], false);
   startProgressBar();
+  startWave();
+  window.addEventListener('resize', () => {
+    if (waveRaf) cancelAnimationFrame(waveRaf);
+    startWave();
+  });
 
   // ===== RECRUITER NOTIFICATION TOAST =====
   const toast = document.getElementById('notification-toast');
@@ -3359,17 +4022,27 @@
     openWindow('ai');
   }
 
-  setTimeout(() => {
+  function showRecruiterToast() {
+    if (document.body.classList.contains('has-window-open')) return;
+    if (tourOverlay && tourOverlay.classList.contains('active')) return;
     toast.classList.add('show');
     playSystemSound('open');
-  }, reduceMotion ? 500 : 3500);
+  }
+
+  setTimeout(showRecruiterToast, reduceMotion ? 500 : 3500);
 
   setTimeout(() => {
     toast.classList.remove('show');
   }, reduceMotion ? 5000 : 11000);
 
-  // Trigger Onboarding Tour automatically on load
+  // Trigger Onboarding Tour automatically on first visit only
   setTimeout(() => {
+    try {
+      if (localStorage.getItem('harshilos_onboarded') === 'true') {
+        openWindow('about');
+        return;
+      }
+    } catch (e) {}
     startTour();
   }, reduceMotion ? 100 : 1500);
 </script>

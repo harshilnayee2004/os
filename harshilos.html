@@ -155,6 +155,11 @@
     -webkit-backdrop-filter: blur(24px) saturate(160%);
     border-radius:24px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 30px 60px -20px rgba(124, 58, 237, 0.3), inset 0 1px 0 rgba(255,255,255,0.1);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .dock::-webkit-scrollbar {
+    display: none;
   }
   .dock-icon{
     position:relative;
@@ -1339,6 +1344,13 @@
       transform: translateY(100%) !important;
       transition: transform 0.35s cubic-bezier(0.1, 0.76, 0.55, 0.94) !important;
       box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3) !important;
+      z-index: 1000 !important;
+    }
+    .win-body {
+      padding-bottom: 24px !important;
+    }
+    .chat-composer {
+      padding-bottom: 24px !important;
     }
     .win.opening {
       transform: translateY(0) !important;

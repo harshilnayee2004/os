@@ -3014,6 +3014,17 @@
 
   // ===== SYSTEM AUDIO MANAGER =====
   let soundEnabled = localStorage.getItem('sys_sound') !== 'false';
+  let userInteracted = false;
+  const setInteracted = () => {
+    userInteracted = true;
+    window.removeEventListener('pointerdown', setInteracted);
+    window.removeEventListener('keydown', setInteracted);
+    window.removeEventListener('touchstart', setInteracted);
+  };
+  window.addEventListener('pointerdown', setInteracted);
+  window.addEventListener('keydown', setInteracted);
+  window.addEventListener('touchstart', setInteracted);
+
   function updateSoundButton() {
     const btn = document.getElementById('sound-toggle-btn');
     if(btn) btn.textContent = soundEnabled ? 'ENABLED' : 'DISABLED';
@@ -3028,6 +3039,7 @@
 
   function playSystemSound(type) {
     if (!soundEnabled) return;
+    if (type === 'open' && !userInteracted) return;
     try {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = ctx.createOscillator();
